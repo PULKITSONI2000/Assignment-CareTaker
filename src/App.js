@@ -1,24 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import "./App.scss";
+
+// firebase Stuff
+import { firebaseConfig } from "./config/firebaseConfig";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/storage";
+import "firebase/auth";
+
+// # zuluitandsolutions@gmail.com
+// # 7375838577
+
+// routes
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import ContextsProvider from "./context/ContextsProvider";
+import Header from "./layout/Header";
+import CreateClass from "./pages/CreateClass";
+
+// init firebase
+firebase.initializeApp(firebaseConfig);
 
 function App() {
+  //FIXME: .env not working
+  //  console.log("Key", firebaseConfig);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <ContextsProvider>
+          <Header />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/createClass" component={CreateClass} />
+          </Switch>
+        </ContextsProvider>
+      </BrowserRouter>
     </div>
   );
 }
