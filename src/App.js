@@ -8,6 +8,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
 import "firebase/auth";
+import "firebase/functions";
 
 // # zuluitandsolutions@gmail.com
 // # 7375838577
@@ -18,6 +19,7 @@ import Login from "./pages/Login";
 import ContextsProvider from "./context/ContextsProvider";
 import Header from "./layout/Header";
 import CreateClass from "./pages/CreateClass";
+import PrivateTeacherRoute from "./components/PrivateTeacherRoute";
 
 // init firebase
 firebase.initializeApp(firebaseConfig);
@@ -27,16 +29,20 @@ function App() {
   //  console.log("Key", firebaseConfig);
   return (
     <div>
-      <BrowserRouter>
-        <ContextsProvider>
+      <ContextsProvider>
+        <BrowserRouter>
           <Header />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/createClass" component={CreateClass} />
+            <PrivateTeacherRoute
+              exact
+              path="/class/create"
+              component={CreateClass}
+            />
           </Switch>
-        </ContextsProvider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </ContextsProvider>
     </div>
   );
 }

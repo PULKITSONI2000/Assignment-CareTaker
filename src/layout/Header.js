@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { BiBookAdd, BiMenu, BiLogIn } from "react-icons/bi";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import M from "materialize-css/dist/js/materialize.min.js";
 import firebase from "firebase/app";
 import { UserContext } from "../context/Context";
+import { SET_USER } from "../context/action.types";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
@@ -15,7 +16,8 @@ const currentTab = (history, path) => {
 };
 
 const Header = ({ history }) => {
-  const { state } = useContext(UserContext);
+  const { state, dispatch } = useContext(UserContext);
+  const [teacherEmail, setTeacherEmail] = useState("");
 
   return (
     <div>
@@ -23,6 +25,10 @@ const Header = ({ history }) => {
         {document.addEventListener("DOMContentLoaded", function () {
           var elems = document.querySelectorAll(".sidenav");
           M.Sidenav.init(elems, { preventScrolling: false });
+        })}
+        {document.addEventListener("DOMContentLoaded", function () {
+          var elems = document.querySelectorAll(".modal");
+          M.Modal.init(elems, {});
         })}
         <div className="nav-wrapper">
           <Link to={"/"} className="brand-logo center">
@@ -52,6 +58,10 @@ const Header = ({ history }) => {
                     className="waves-effect  red-text"
                     onClick={() => {
                       firebase.auth().signOut();
+                      dispatch({
+                        type: SET_USER,
+                        payload: false,
+                      });
                     }}
                   >
                     Log Out
@@ -60,12 +70,23 @@ const Header = ({ history }) => {
                 </Link>
               </li>
             )}
-            {state.user && (
+            {state.teacher ? (
               <li className="right">
                 <Link
                   className="valign-wrapper"
-                  style={currentTab(history, "/join")}
-                  to="/join"
+                  style={currentTab(history, "/class/create")}
+                  to="/class/create"
+                >
+                  <span className="hide-on-small-only">Create Class</span>{" "}
+                  <BiBookAdd size={30} />
+                </Link>
+              </li>
+            ) : (
+              <li className="right">
+                <Link
+                  className="valign-wrapper"
+                  style={currentTab(history, "/class/join")}
+                  to="/class/join"
                 >
                   <span className="hide-on-small-only">Join Class</span>{" "}
                   <BiBookAdd size={30} />
@@ -83,11 +104,15 @@ const Header = ({ history }) => {
             </div>
             {state.user && (
               <Link
-                to="/login"
                 className="waves-effect right"
                 onClick={() => {
                   firebase.auth().signOut();
+                  dispatch({
+                    type: SET_USER,
+                    payload: false,
+                  });
                 }}
+                to="/login"
               >
                 <RiLogoutBoxRLine size={30} color="red" />
               </Link>
@@ -111,22 +136,88 @@ const Header = ({ history }) => {
             </Link>
           </div>
         </li>
-        <li>
-          <Link to={"/classes"}>Classes</Link>
-        </li>
-        <li>
-          <Link to={"/"}>Second Link</Link>
-        </li>
+        {state.user && (
+          <li>
+            <Link to={"/classes"}>Classes</Link>
+          </li>
+        )}
+        {state.user && state.teacher && (
+          <li>
+            <Link to={"/class/create"}>Create Class</Link>
+          </li>
+        )}
+        {!state.user && (
+          <li>
+            <Link to={"/login"}>Login</Link>
+          </li>
+        )}
         <li>
           <div className="divider"></div>
         </li>
 
         <li>
-          <Link to={"/"} className="subheader">
-            Subheader
-          </Link>
+          {/* TODO: only for admin */}
+          {state.teacher && (
+            <Link to={"/"} data-target="addTeacher" className=" modal-trigger">
+              Add Teacher
+            </Link>
+          )}
         </li>
       </ul>
+
+      {/* Modal */}
+      <div id="addTeacher" className="modal">
+        <div className="modal-content">
+          <h4>Add Teacher</h4>
+
+          <div className="row">
+            <h5>Add Teacher Email Id</h5>
+            <div className="input-field col s12">
+              <input
+                id="teacherEmail"
+                type="email"
+                value={teacherEmail}
+                onChange={(event) => {
+                  setTeacherEmail(event.target.value);
+                }}
+                className="validate"
+              />
+              <label htmlFor="teacherEmail">Email</label>
+              <span
+                className="helper-text"
+                data-error="Please check the mail "
+                data-success="right"
+              >
+                ( eg- example@gmial.com )
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <a
+            href="#!"
+            className="modal-close waves-effect waves-green btn-flat"
+          >
+            Close
+          </a>
+          <a
+            href="#!"
+            onClick={() => {
+              const addAdminRole = firebase
+                .functions()
+                .httpsCallable("addTeacherRole");
+              console.log("Email", teacherEmail);
+
+              addAdminRole({ email: teacherEmail }).then((result) => {
+                console.log(result);
+              });
+            }}
+            className="modal-close waves-effect waves-green btn-flat"
+          >
+            Add
+          </a>
+        </div>
+      </div>
     </div>
   );
 };

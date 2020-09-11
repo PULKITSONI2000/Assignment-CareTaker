@@ -10,7 +10,6 @@ const Login = () => {
   const { state } = useContext(UserContext);
 
   const addUserInfo = (cred) => {
-    console.log(cred);
     firebase
       .firestore()
       .collection("user")
