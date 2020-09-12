@@ -3,7 +3,7 @@ import reducer from "./reducer";
 import { UserContext } from "./Context";
 
 import firebase from "firebase/app";
-import { SET_USER, SET_TEACHER } from "./action.types";
+import { SET_USER, SET_TEACHER, SET_CLASSES } from "./action.types";
 
 const ContextsProvider = ({ children }) => {
   const initialState = {
@@ -26,8 +26,31 @@ const ContextsProvider = ({ children }) => {
             type: SET_TEACHER,
             payload: idTokenResult.claims.teacher,
           });
+          if (idTokenResult.claims.teacher) {
+            firebase
+              .firestore()
+              .collectionGroup("classes")
+              .where("teacher", "==", userAuthStatus.displayName)
+              .get()
+              .then((querySnapshot) => {
+                var classes = [];
+                querySnapshot.forEach((doc) => {
+                  // doc.data() is never undefined for query doc snapshots
+                  // console.log(doc.id, " => ", doc.data());
+                  classes.push(doc.data());
+                });
+                dispatch({
+                  type: SET_CLASSES,
+                  payload: classes,
+                });
+              })
+              .catch((error) => {
+                console.log("Error getting documents: ", error);
+              });
+          } else {
+          }
+          /// setClass
         });
-
         dispatch({
           type: SET_USER,
           payload: userAuthStatus,

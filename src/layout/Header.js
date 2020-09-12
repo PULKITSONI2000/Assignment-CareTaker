@@ -2,7 +2,9 @@ import React, { useContext, useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { BiBookAdd, BiMenu, BiLogIn } from "react-icons/bi";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+
 import M from "materialize-css/dist/js/materialize.min.js";
+
 import firebase from "firebase/app";
 import { UserContext } from "../context/Context";
 import { SET_USER } from "../context/action.types";

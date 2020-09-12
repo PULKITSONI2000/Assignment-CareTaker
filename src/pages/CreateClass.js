@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import { UserContext } from "../context/Context";
+import { nanoid } from "nanoid";
+import { Redirect } from "react-router-dom";
+import { ADD_CLASSES } from "../context/action.types";
 
 const CreateClass = () => {
   const [classInfo, setClassInfo] = useState({
@@ -7,12 +13,57 @@ const CreateClass = () => {
     classSection: "",
     classSubject: "",
   });
-  //   TODO: add it to database
+  const [success, setSuccess] = useState(false);
+
+  const { state, dispatch } = useContext(UserContext);
 
   const handleChange = (name) => (event) => {
     setClassInfo({ ...classInfo, [name]: event.target.value });
   };
 
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const code = nanoid(10);
+
+    firebase
+      .firestore()
+      .collection("user")
+      .doc(state.user.uid)
+      .collection("classes")
+      .doc(code)
+      .set({
+        title: classInfo.classTitle,
+        description: classInfo.classDescription,
+        section: classInfo.classSection,
+        subject: classInfo.classSubject,
+        teacher: state.user.displayName,
+        code: code,
+      })
+      .then((result) => {
+        // console.log(result);
+        dispatch({
+          type: ADD_CLASSES,
+          payload: {
+            title: classInfo.classTitle,
+            description: classInfo.classDescription,
+            section: classInfo.classSection,
+            subject: classInfo.classSubject,
+            teacher: state.user.displayName,
+            code: code,
+          },
+        });
+        setSuccess(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  if (success) {
+    return <Redirect to="/" />;
+  }
+
+  //   TODO: add it to database
   return (
     <div>
       <form className="row">
@@ -59,13 +110,16 @@ const CreateClass = () => {
           </div>
           <div className="center-align">
             {classInfo.classTitle === "" ? (
-              <div className="waves-effect disabled waves-light btn-large">
+              <button className="waves-effect disabled waves-light btn-large">
                 Class Name is required
-              </div>
+              </button>
             ) : (
-              <div className="waves-effect waves-light btn-large">
+              <button
+                className="waves-effect waves-light btn-large"
+                onClick={onSubmit}
+              >
                 Create Class
-              </div>
+              </button>
             )}
           </div>
         </div>

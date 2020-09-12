@@ -5,7 +5,7 @@ import { UserContext } from "../context/Context";
 const PrivateTeacherRoute = ({ component: Component, ...rest }) => {
   const { state } = useContext(UserContext);
 
-  console.log("router", state);
+  // console.log("router", state);
 
   return (
     <Route

@@ -1,5 +1,30 @@
+@mixin randomBGColor() {
+  $color: random(8);
+
+  @if $color == 1 {
+    background-color: #1287a5;
+  } @else if $color == 2 {
+    background-color: #0a79df;
+  } @else if $color == 3 {
+    background-color: #487eb0;
+  } @else if $color == 4 {
+    background-color: #67e6dc;
+  } @else if $color == 5 {
+    background-color: #00cccd;
+  } @else if $color == 6 {
+    background-color: #bb2cd9;
+  } @else if $color == 7 {
+    background-color: #01cbc6;
+  } @else if $color == 8 {
+    background-color: #ea7773;
+  }
+}
+
 .mt-10 {
   margin-top: 10px;
+}
+.mt-20 {
+  margin-top: 20px;
 }
 .h-100 {
   height: 100%;
@@ -9,4 +34,31 @@
 }
 .center {
   margin: auto;
+}
+.card-design {
+  height: 140px;
+  border-radius: 20px 20px 0px 0px;
+  @include randomBGColor();
+}
+.card {
+  border-radius: 20px !important;
+}
+.class-box {
+  min-height: 200px;
+  border-radius: 20px;
+  @include randomBGColor();
+
+  h2 {
+    position: relative;
+    top: 20px;
+    left: 30px;
+    bottom: 10px;
+  }
+
+  p {
+    margin: 0px;
+    position: relative;
+    left: 40px;
+    font-size: 1.3rem;
+  }
 }

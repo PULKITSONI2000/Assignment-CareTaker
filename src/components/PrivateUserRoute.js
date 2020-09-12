@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { UserContext } from "../context/Context";
 
-const PrivateStudentRoute = ({ component: Component, ...rest }) => {
+const PrivateUserRoute = ({ component: Component, ...rest }) => {
   const { state } = useContext(UserContext);
 
   return (
@@ -14,20 +14,11 @@ const PrivateStudentRoute = ({ component: Component, ...rest }) => {
         const tempState = state;
 
         return tempState.user ? (
-          tempState.teacher === false ? (
-            <Component {...props} />
-          ) : (
-            <Redirect
-              to={{
-                pathname: "/",
-                state: { from: props.location },
-              }}
-            />
-          )
+          <Component {...props} />
         ) : (
           <Redirect
             to={{
-              pathname: "/login",
+              pathname: "/",
               state: { from: props.location },
             }}
           />
@@ -37,4 +28,4 @@ const PrivateStudentRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export default PrivateStudentRoute;
+export default PrivateUserRoute;
