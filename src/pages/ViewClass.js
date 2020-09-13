@@ -34,7 +34,7 @@ const ViewClass = ({ match }) => {
 
   return (
     <div className="container">
-      {console.log("yo", classInfo)}
+      {/* {console.log("yo", classInfo)} */}
       <div>
         <div className="class-box">
           <h2>{classInfo.title}</h2>
@@ -50,7 +50,7 @@ const ViewClass = ({ match }) => {
       {/*/// add class */}
       {state.teacher && (
         <div className=" mt-20">
-          <AddAssignment />
+          <AddAssignment state={state} classInfo={classInfo} />
         </div>
       )}
     </div>

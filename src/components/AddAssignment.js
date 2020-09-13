@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
+import { FaFilePdf } from "react-icons/fa";
 
 import { nanoid } from "nanoid";
 import {
@@ -13,7 +14,7 @@ import {
   TimePicker,
 } from "react-materialize";
 
-const AddAssignment = () => {
+const AddAssignment = ({ state, classInfo }) => {
   const [assignmentName, setassignmentName] = useState("");
   const [assignmentDueDate, setassignmentDueDate] = useState(false);
   const [assignmentDescription, setAssignmentDescription] = useState("");
@@ -68,15 +69,45 @@ const AddAssignment = () => {
           uploadTask.snapshot.ref
             .getDownloadURL()
             .then((downloadURL) => {
-              setIsUploading(false);
               var tempfiles = files;
               tempfiles.push(downloadURL);
+              console.log("tempfiles", tempfiles);
               setFiles(tempfiles);
+              setIsUploading(false);
             })
             .catch((err) => console.log(err));
         }
       );
     } catch (error) {}
+  };
+  console.log("State", state);
+  console.log("classInfo", classInfo);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    firebase
+      .firestore()
+      .collection("user")
+      .doc(state.user.uid)
+      .collection("classes")
+      .doc(classInfo.code)
+      .collection("assignment")
+      .add({
+        name: assignmentName,
+        description: assignmentDescription,
+        dueDate: firebase.firestore.Timestamp.fromDate(
+          new Date(assignmentDueDate)
+        ),
+        assignmentFiles: files,
+      })
+      .then((result) => {
+        console.log("Success", result);
+        // setSuccess(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -108,7 +139,7 @@ const AddAssignment = () => {
               }}
               className="materialize-textarea"
             ></textarea>
-            <label htmlFor="textarea1">Textarea</label>
+            <label htmlFor="textarea1">Assignment Description</label>
           </div>
         </div>
 
@@ -155,6 +186,17 @@ const AddAssignment = () => {
         </div>
 
         {isUploading && <ProgressBar progress={progress} />}
+
+        <Row>
+          {files.map((pdfLink, index) => (
+            <Col key={index}>
+              <a href={pdfLink} target="_blank" rel="noopener noreferrer">
+                <FaFilePdf size={70} color="red" />
+              </a>
+            </Col>
+          ))}
+        </Row>
+
         {/* Files */}
         <div className="file-field input-field">
           <div className="btn">
@@ -175,8 +217,21 @@ const AddAssignment = () => {
             />
           </div>
         </div>
-        {console.log(files)}
+
+        {files.length && !isUploading && assignmentName && assignmentDueDate ? (
+          <span
+            className="waves-effect waves-light btn-large"
+            onClick={onSubmit}
+          >
+            Add Assignment
+          </span>
+        ) : (
+          <span className="waves-effect disabled waves-light btn-large">
+            Add Assignment
+          </span>
+        )}
       </form>
+      {console.log(files)}
     </div>
   );
 };
