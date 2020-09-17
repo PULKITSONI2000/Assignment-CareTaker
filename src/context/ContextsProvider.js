@@ -20,11 +20,11 @@ const ContextsProvider = ({ children }) => {
       // console.log("User Auth", userAuthStatus);
       if (userAuthStatus) {
         userAuthStatus.getIdTokenResult().then((idTokenResult) => {
-          console.log("Teacher ", idTokenResult.claims.teacher);
-          // user.admin = idTokenResult.claims.teacher;
+          console.log("Teacher ", idTokenResult.claims.teacher || false);
+
           dispatch({
             type: SET_TEACHER,
-            payload: idTokenResult.claims.teacher,
+            payload: idTokenResult.claims.teacher || false,
           });
           if (idTokenResult.claims.teacher) {
             firebase
@@ -48,6 +48,26 @@ const ContextsProvider = ({ children }) => {
                 console.log("Error getting documents: ", error);
               });
           } else {
+            firebase
+              .firestore()
+              .collectionGroup("JoinedClasses")
+              .where("studentId", "==", userAuthStatus.uid)
+              .get()
+              .then((querySnapshot) => {
+                var classes = [];
+                querySnapshot.forEach((doc) => {
+                  // doc.data() is never undefined for query doc snapshots
+                  // console.log(doc.id, " => ", doc.data());
+                  classes.push(doc.data());
+                });
+                dispatch({
+                  type: SET_CLASSES,
+                  payload: classes,
+                });
+              })
+              .catch((error) => {
+                console.log("Error getting documents: ", error);
+              });
           }
           /// setClass
         });

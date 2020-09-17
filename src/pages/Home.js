@@ -11,7 +11,6 @@ const Home = () => {
   const user = state.user;
 
   if (!user) {
-    console.log("State At home", state);
     return <Redirect to="/login" />;
   }
   return (

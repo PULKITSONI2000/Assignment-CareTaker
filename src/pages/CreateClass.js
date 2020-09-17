@@ -37,6 +37,7 @@ const CreateClass = () => {
         section: classInfo.classSection,
         subject: classInfo.classSubject,
         teacher: state.user.displayName,
+        teacherId: state.user.uid,
         code: code,
       })
       .then((result) => {

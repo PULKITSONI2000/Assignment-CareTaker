@@ -44,6 +44,9 @@ const ClassCard = ({ classInfo }) => {
                 <br />
               </span>
             )}
+            <Link className="mt-20 " to={`/class/${classInfo.code}`}>
+              Go to Class
+            </Link>
           </p>
         </div>
       </div>

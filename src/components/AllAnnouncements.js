@@ -1,0 +1,86 @@
+import React, { useEffect, useState } from "react";
+import firebase from "firebase/app";
+import "firebase/firestore";
+
+import M from "materialize-css/dist/js/materialize.min.js";
+
+const AllAnnouncements = ({ userId, isTeacher, classCode }) => {
+  const [announcements, setAnnouncements] = useState([]);
+
+  useEffect(() => {
+    var unsubscribe = firebase
+      .firestore()
+      .collectionGroup("announcement")
+      .where("classCode", "==", classCode)
+      .onSnapshot(
+        (querySnapshot) => {
+          var assigns = [];
+          querySnapshot.forEach((doc) => {
+            assigns.push(doc.data());
+          });
+          setAnnouncements(assigns);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    var elemsforCollapsible = document.querySelectorAll(".collapsible");
+    M.Collapsible.init(elemsforCollapsible, {});
+
+    return () => {
+      unsubscribe();
+      setAnnouncements({});
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  const deleteAnnouncement = (announcementId) => {
+    firebase
+      .firestore()
+      .collection("user")
+      .doc(userId)
+      .collection("classes")
+      .doc(classCode)
+      .collection("announcement")
+      .doc(announcementId)
+      .delete()
+      .then(function () {
+        console.log("Document successfully deleted!");
+      })
+      .catch(function (error) {
+        console.error("Error removing document: ", error);
+      });
+  };
+  return (
+    <div>
+      <ul className="collapsible">
+        {announcements.map((announcement, index) => (
+          <li key={index}>
+            <div className="collapsible-header">
+              {/* <i className="material-icons">filter_drama</i> */}
+              {announcement.announcementTitle}
+              <span className="right-align grey-text ml-10">
+                ~{announcement.teacher}
+              </span>
+            </div>
+            <div className="collapsible-body">
+              <span>{announcement.announcementDetails}</span>
+              {isTeacher && (
+                <span
+                  className="waves-effect waves-teal btn-flat right red-text"
+                  onClick={() => {
+                    deleteAnnouncement(announcement.announcementId);
+                  }}
+                >
+                  Delete
+                </span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default AllAnnouncements;

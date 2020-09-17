@@ -3,11 +3,13 @@ import { withRouter, Link } from "react-router-dom";
 import { BiBookAdd, BiMenu, BiLogIn } from "react-icons/bi";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 
+import firebase from "firebase/app";
+import "firebase/firestore";
+
 import M from "materialize-css/dist/js/materialize.min.js";
 
-import firebase from "firebase/app";
 import { UserContext } from "../context/Context";
-import { SET_USER } from "../context/action.types";
+import { ADD_CLASSES, SET_TEACHER, SET_USER } from "../context/action.types";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
@@ -20,6 +22,71 @@ const currentTab = (history, path) => {
 const Header = ({ history }) => {
   const { state, dispatch } = useContext(UserContext);
   const [teacherEmail, setTeacherEmail] = useState("");
+  const [joinClassCode, setjoinClassCode] = useState("");
+  // const [classResult, setClassResult] = useState({});
+
+  const handleJoinClass = () => {
+    firebase
+      .firestore()
+      .collectionGroup("classes")
+      .where("code", "==", joinClassCode)
+      .get()
+      .then((querySnapshot) => {
+        var classInfo = [];
+        querySnapshot.forEach((doc) => {
+          classInfo = doc.data();
+        });
+
+        firebase
+          .firestore()
+          .collection("user")
+          .doc(classInfo.teacherId)
+          .collection("classes")
+          .doc(classInfo.code)
+          .update({
+            students: firebase.firestore.FieldValue.arrayUnion({
+              studentId: state.user.uid,
+              studentName: state.user.displayName,
+              studentPhotoUrl: state.user.photoURL,
+            }),
+          })
+          .then(() => {
+            firebase
+              .firestore()
+              .collection("user")
+              .doc(state.user.uid)
+              .collection("JoinedClasses")
+              .add({
+                title: classInfo.title,
+                description: classInfo.description,
+                section: classInfo.section,
+                subject: classInfo.subject,
+                teacher: classInfo.teacher,
+                teacherId: classInfo.teacherId,
+                code: classInfo.code,
+                studentId: state.user.uid,
+              })
+              .then(() => {
+                console.log("Class", classInfo);
+                dispatch({
+                  type: ADD_CLASSES,
+                  payload: classInfo,
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        // setClassResult(classInfo);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div>
@@ -64,6 +131,10 @@ const Header = ({ history }) => {
                         type: SET_USER,
                         payload: false,
                       });
+                      dispatch({
+                        type: SET_TEACHER,
+                        payload: false,
+                      });
                     }}
                   >
                     Log Out
@@ -72,32 +143,81 @@ const Header = ({ history }) => {
                 </Link>
               </li>
             )}
-            {state.teacher ? (
-              <li className="right">
-                <Link
-                  className="valign-wrapper"
-                  style={currentTab(history, "/class/create")}
-                  to="/class/create"
-                >
-                  <span className="hide-on-small-only">Create Class</span>{" "}
-                  <BiBookAdd size={30} />
-                </Link>
-              </li>
-            ) : (
-              <li className="right">
-                <Link
-                  className="valign-wrapper"
-                  style={currentTab(history, "/class/join")}
-                  to="/class/join"
-                >
-                  <span className="hide-on-small-only">Join Class</span>{" "}
-                  <BiBookAdd size={30} />
-                </Link>
-              </li>
-            )}
+            {state.user.uid &&
+              (state.teacher ? (
+                <li className="right">
+                  <Link
+                    className="valign-wrapper"
+                    style={currentTab(history, "/class/create")}
+                    to="/class/create"
+                  >
+                    <span className="hide-on-small-only">Create Class</span>
+                    <BiBookAdd size={30} />
+                  </Link>
+                </li>
+              ) : (
+                <li className="right">
+                  <Link
+                    to={"/"}
+                    style={currentTab(history, "/class/join")}
+                    data-target="joinClass"
+                    className="valign-wrapper modal-trigger"
+                  >
+                    <span className="hide-on-small-only">Join Class</span>
+                    <BiBookAdd size={30} />
+                  </Link>
+                </li>
+              ))}
           </ul>
         </div>
       </nav>
+
+      {/* Join Class Modal */}
+      <div id="joinClass" className="modal">
+        <div className="modal-content">
+          <h4>Join Class</h4>
+
+          <div className="row">
+            <h5>Please Add Class Code</h5>
+            <div className="input-field col s12">
+              <input
+                id="joinClass"
+                value={joinClassCode}
+                onChange={(event) => {
+                  setjoinClassCode(event.target.value);
+                }}
+                className="validate"
+              />
+              {/* <label htmlFor="joinClass">Class Code</label> */}
+              <span
+                className="helper-text"
+                data-error="Please check the mail "
+                data-success="right"
+              >
+                ( eg- IRFa-VaY2b )
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <a
+            href="#!"
+            className="modal-close waves-effect waves-green btn-flat"
+          >
+            Close
+          </a>
+          <a
+            href="#!"
+            onClick={() => {
+              handleJoinClass();
+            }}
+            className="modal-close waves-effect waves-green btn-flat"
+          >
+            Add
+          </a>
+        </div>
+      </div>
+
       <ul id="slide-out" className="sidenav">
         <li>
           <div className="user-view">
@@ -167,7 +287,7 @@ const Header = ({ history }) => {
         </li>
       </ul>
 
-      {/* Modal */}
+      {/* Add Teacher Modal */}
       <div id="addTeacher" className="modal">
         <div className="modal-content">
           <h4>Add Teacher</h4>

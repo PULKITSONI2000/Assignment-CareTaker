@@ -24,6 +24,9 @@ import PrivateTeacherRoute from "./components/PrivateTeacherRoute";
 
 import "./App.scss";
 import PrivateUserRoute from "./components/PrivateUserRoute";
+import ViewAssignment from "./pages/ViewAssignment";
+import PageNotFound from "./pages/PageNotFound";
+import ViewAssignmentReport from "./pages/ViewAssignmentReport";
 
 // init firebase
 firebase.initializeApp(firebaseConfig);
@@ -38,17 +41,34 @@ function App() {
           <Header />
           <Switch>
             <Route exact path="/" component={Home} />
+
             <Route exact path="/login" component={Login} />
+
             <PrivateTeacherRoute
               exact
               path="/class/create"
               component={CreateClass}
             />
+
             <PrivateUserRoute
               exact
               path="/class/:classcode"
               component={ViewClass}
             />
+
+            <PrivateUserRoute
+              exact
+              path="/assignment/:assignmentId"
+              component={ViewAssignment}
+            />
+
+            <PrivateTeacherRoute
+              exact
+              path="/assignment/report/:assignmentId"
+              component={ViewAssignmentReport}
+            />
+
+            <Route exact path="*" component={PageNotFound} />
           </Switch>
         </BrowserRouter>
       </ContextsProvider>

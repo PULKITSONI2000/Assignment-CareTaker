@@ -14,7 +14,7 @@ import {
   TimePicker,
 } from "react-materialize";
 
-const AddAssignment = ({ state, classInfo }) => {
+const AddAssignment = ({ state, classCode }) => {
   const [assignmentName, setassignmentName] = useState("");
   const [assignmentDueDate, setassignmentDueDate] = useState(false);
   const [assignmentDescription, setAssignmentDescription] = useState("");
@@ -25,6 +25,7 @@ const AddAssignment = ({ state, classInfo }) => {
 
   const fileHandler = async (e) => {
     try {
+      console.log(e.target.files);
       const file = e.target.files[0];
 
       var metadata = {
@@ -52,6 +53,7 @@ const AddAssignment = ({ state, classInfo }) => {
               break;
             case firebase.storage.TaskState.RUNNING:
               console.log("UPloading is in progress...");
+              setIsUploading(true);
               break;
             default:
               console.log("Something went wrong in uploading");
@@ -70,39 +72,55 @@ const AddAssignment = ({ state, classInfo }) => {
             .getDownloadURL()
             .then((downloadURL) => {
               var tempfiles = files;
-              tempfiles.push(downloadURL);
-              console.log("tempfiles", tempfiles);
+              tempfiles.push({
+                pdfName: file.name,
+                pdfFile: downloadURL,
+              });
+              // console.log("tempfiles", file.name);
               setFiles(tempfiles);
               setIsUploading(false);
+              ///
+              setFiles(files);
             })
             .catch((err) => console.log(err));
         }
       );
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
-  console.log("State", state);
-  console.log("classInfo", classInfo);
 
   const onSubmit = (event) => {
     event.preventDefault();
+    const code = nanoid(14);
 
     firebase
       .firestore()
       .collection("user")
       .doc(state.user.uid)
       .collection("classes")
-      .doc(classInfo.code)
+      .doc(classCode)
       .collection("assignment")
-      .add({
+      .doc(code)
+      .set({
         name: assignmentName,
         description: assignmentDescription,
         dueDate: firebase.firestore.Timestamp.fromDate(
           new Date(assignmentDueDate)
         ),
         assignmentFiles: files,
+        classCode: classCode,
+        assignmentId: code,
+        teacherId: state.user.uid,
       })
       .then((result) => {
         console.log("Success", result);
+        setassignmentName("");
+        setAssignmentDescription("");
+        setassignmentDueDate(false);
+        setFiles([]);
+        setIsUploading(false);
+        setProgress(0);
         // setSuccess(true);
       })
       .catch((err) => {
@@ -112,6 +130,7 @@ const AddAssignment = ({ state, classInfo }) => {
 
   return (
     <div>
+      {/* {console.log("files", files)} */}
       <form>
         {/* /// Name */}
         <div className="input-field">
@@ -185,17 +204,46 @@ const AddAssignment = ({ state, classInfo }) => {
           </Row>
         </div>
 
-        {isUploading && <ProgressBar progress={progress} />}
+        {isUploading && (
+          <ProgressBar className="container green-text" progress={progress} />
+        )}
 
-        <Row>
-          {files.map((pdfLink, index) => (
+        {/* <Row>
+          {files.map((pdf, index) => (
             <Col key={index}>
-              <a href={pdfLink} target="_blank" rel="noopener noreferrer">
-                <FaFilePdf size={70} color="red" />
+              <a href={pdf.pdfFile} target="_blank" rel="noopener noreferrer">
+                <FaFilePdf size={70} color="red" /> <br />
+                {pdf.pdfName}
               </a>
             </Col>
           ))}
-        </Row>
+        </Row> */}
+
+        {/* /// attachments */}
+        <div className="mt-10 mb-30">
+          <ul className="collection with-header">
+            {files && files.length > 0 && (
+              <li className="collection-header">
+                <h5 className="green-text">Attachments</h5>
+              </li>
+            )}
+            {files &&
+              files.map((pdf, index) => (
+                <li key={index} className="collection-item">
+                  <div>
+                    <a
+                      href={pdf.pdfFile}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaFilePdf size={30} className="left" color="red" />
+                      <span className="valign-wrapper">{pdf.pdfName}</span>
+                    </a>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </div>
 
         {/* Files */}
         <div className="file-field input-field">
@@ -218,20 +266,21 @@ const AddAssignment = ({ state, classInfo }) => {
           </div>
         </div>
 
-        {files.length && !isUploading && assignmentName && assignmentDueDate ? (
-          <span
-            className="waves-effect waves-light btn-large"
-            onClick={onSubmit}
-          >
-            Add Assignment
-          </span>
-        ) : (
-          <span className="waves-effect disabled waves-light btn-large">
-            Add Assignment
-          </span>
-        )}
+        <div className="right-align">
+          {!isUploading && assignmentName && assignmentDueDate ? (
+            <span
+              className="waves-effect waves-light btn-large "
+              onClick={onSubmit}
+            >
+              Add Assignment
+            </span>
+          ) : (
+            <span className="waves-effect disabled waves-light btn-large ">
+              Add Assignment
+            </span>
+          )}
+        </div>
       </form>
-      {console.log(files)}
     </div>
   );
 };
