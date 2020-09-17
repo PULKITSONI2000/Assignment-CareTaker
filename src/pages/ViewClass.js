@@ -50,10 +50,13 @@ const ViewClass = ({ match }) => {
       <div>
         <div className="class-box">
           <h2>{classInfo.title}</h2>
-          <p className="t-20">Teacher : {classInfo.teacher}</p>
-          {classInfo.subject && <p>Subject : {classInfo.subject}</p>}
-          {classInfo.section && <p>Section : {classInfo.section}</p>}
-          <p>Code : {classInfo.code}</p>
+          {/* <p className="t-20">Teacher : {classInfo.teacher}</p>
+          {classInfo.subject && <p>Subject : {classInfo.subject}</p>} */}
+          {/* {classInfo.section && <p>Section : {classInfo.section}</p>} */}
+          <p>
+            Class Code :{" "}
+            <span className="grey-text text-darken-2">{classInfo.code}</span>
+          </p>
         </div>
       </div>
 
@@ -119,7 +122,69 @@ const ViewClass = ({ match }) => {
             )}
           </div>
         )}
-        <div id="AboutClass">About Class</div>
+        <div id="AboutClass">
+          <div className="container">
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <h5>Class Name</h5>
+                  </td>
+                  <td>
+                    <h5> : </h5>
+                  </td>
+                  <td>
+                    <h5>{classInfo.title}</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h5>Teacher</h5>
+                  </td>
+                  <td>
+                    <h5> : </h5>
+                  </td>
+                  <td>
+                    <h5>{classInfo.teacher}</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h5>Subject</h5>
+                  </td>
+                  <td>
+                    <h5> : </h5>
+                  </td>
+                  <td>
+                    <h5>{classInfo.subject}</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h5>Section</h5>
+                  </td>
+                  <td>
+                    <h5> : </h5>
+                  </td>
+                  <td>
+                    <h5>{classInfo.section}</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h5>Code</h5>
+                  </td>
+                  <td>
+                    <h5> : </h5>
+                  </td>
+                  <td>
+                    <h5>{classInfo.code}</h5>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -27,18 +27,30 @@ import PrivateUserRoute from "./components/PrivateUserRoute";
 import ViewAssignment from "./pages/ViewAssignment";
 import PageNotFound from "./pages/PageNotFound";
 import ViewAssignmentReport from "./pages/ViewAssignmentReport";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // init firebase
 firebase.initializeApp(firebaseConfig);
 
 function App() {
-  //FIXME: .env not working
-  //  console.log("Key", firebaseConfig);
+  // console.log("Key", firebaseConfig);
   return (
     <div>
       <ContextsProvider>
         <BrowserRouter>
           <Header />
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <Switch>
             <Route exact path="/" component={Home} />
 

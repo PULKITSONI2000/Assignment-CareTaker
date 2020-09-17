@@ -16,12 +16,17 @@ const Home = () => {
   return (
     <div>
       <Row>
-        {state.classes === [] ? (
-          <div className="valign-wrapper">
-            <h2 className="center-align">
-              No class Join yet
-              <h4>Press on join class (button on top) to join the class</h4>
+        {state.classes.length <= 0 ? (
+          <div>
+            <h2 className="center-align w-100 grey-text ">
+              {state.teacher ? "No Class created yet" : "No class Join yet"}
             </h2>
+            <br />
+            <h4 className=" center-align w-100 grey-text ">
+              {state.teacher
+                ? "Press on Create class (button on top) to Create the class"
+                : "Press on join class (button on top) to join the class"}
+            </h4>
           </div>
         ) : (
           <Row>

@@ -129,9 +129,9 @@ const AddAssignment = ({ state, classCode }) => {
   };
 
   return (
-    <div>
+    <div className="container ">
       {/* {console.log("files", files)} */}
-      <form>
+      <form className="my-50">
         {/* /// Name */}
         <div className="input-field">
           <input
@@ -160,48 +160,6 @@ const AddAssignment = ({ state, classCode }) => {
             ></textarea>
             <label htmlFor="textarea1">Assignment Description</label>
           </div>
-        </div>
-
-        {/* /// DueDate */}
-        <div>
-          <Row>
-            <Col>
-              <h6>Date :</h6>
-              <DatePicker
-                id="assignmentDueDate"
-                options={{
-                  autoClose: true,
-                  defaultDate: new Date(),
-                  firstDay: 0,
-                  format: "dd mmm yyyy",
-                  minDate: new Date(),
-                }}
-                onChange={(date) => {
-                  setassignmentDueDate(date);
-                }}
-              />
-            </Col>
-            <Col>
-              {assignmentDueDate && (
-                <>
-                  <h6>Time :</h6>
-
-                  <TimePicker
-                    id="assignmentDueTime"
-                    onChange={(hour, minutes) => {
-                      // console.log(hour, minutes);
-                      assignmentDueDate && assignmentDueDate.setHours(hour);
-                      assignmentDueDate &&
-                        assignmentDueDate.setMinutes(minutes);
-                    }}
-                    options={{
-                      twelveHour: false,
-                    }}
-                  />
-                </>
-              )}
-            </Col>
-          </Row>
         </div>
 
         {isUploading && (
@@ -266,7 +224,49 @@ const AddAssignment = ({ state, classCode }) => {
           </div>
         </div>
 
-        <div className="right-align">
+        {/* /// DueDate */}
+        <div className="mt-20">
+          <Row>
+            <Col>
+              <h6>Date :</h6>
+              <DatePicker
+                id="assignmentDueDate"
+                options={{
+                  autoClose: true,
+                  defaultDate: new Date(),
+                  firstDay: 0,
+                  format: "dd mmm yyyy",
+                  minDate: new Date(),
+                }}
+                onChange={(date) => {
+                  setassignmentDueDate(date);
+                }}
+              />
+            </Col>
+            <Col>
+              {assignmentDueDate && (
+                <>
+                  <h6>Time :</h6>
+
+                  <TimePicker
+                    id="assignmentDueTime"
+                    onChange={(hour, minutes) => {
+                      // console.log(hour, minutes);
+                      assignmentDueDate && assignmentDueDate.setHours(hour);
+                      assignmentDueDate &&
+                        assignmentDueDate.setMinutes(minutes);
+                    }}
+                    options={{
+                      twelveHour: false,
+                    }}
+                  />
+                </>
+              )}
+            </Col>
+          </Row>
+        </div>
+
+        <div className="center-align">
           {!isUploading && assignmentName && assignmentDueDate ? (
             <span
               className="waves-effect waves-light btn-large "

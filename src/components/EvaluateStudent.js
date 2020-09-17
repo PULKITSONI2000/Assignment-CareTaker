@@ -5,6 +5,7 @@ import "firebase/firestore";
 import { FaFilePdf } from "react-icons/fa";
 import { UserContext } from "../context/Context";
 import M from "materialize-css/dist/js/materialize.min.js";
+import { toast } from "react-toastify";
 
 const EvaluateStudent = ({ student }) => {
   const [assignmentInfo, setAssignmentInfo] = useState({});
@@ -99,15 +100,19 @@ const EvaluateStudent = ({ student }) => {
           })
           .then(function () {
             console.log("Transaction successfully committed!");
+
+            toast.success("Successfully Remarked");
             setGrade("");
             setFeedback("");
           })
           .catch(function (error) {
             console.log("Transaction failed: ", error);
+            toast.error("Failed, Please Try Again");
           });
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Failed, Please Try Again");
       });
 
     /// update in class assignment
@@ -133,7 +138,7 @@ const EvaluateStudent = ({ student }) => {
   return (
     <div className="mt-20">
       {student === undefined ? (
-        <h5>No Student Selected</h5>
+        <h5 className="grey-text center-align mt-50">No Student Selected</h5>
       ) : (
         <div>
           <div className="center-align avatar">
@@ -148,12 +153,7 @@ const EvaluateStudent = ({ student }) => {
             />
             <h4>{student.studentName}</h4>
           </div>
-          {assignmentInfo.submittedMessage && (
-            <h5 className="green-text mt-20">Answer :</h5>
-          )}
-          {assignmentInfo.submittedMessage && (
-            <blockquote>{assignmentInfo.submittedMessage}</blockquote>
-          )}
+
           {/* /// attachments */}
           <div className="mt-10">
             <ul className="collection with-header">
@@ -180,6 +180,52 @@ const EvaluateStudent = ({ student }) => {
                 ))}
             </ul>
           </div>
+
+          {assignmentInfo.submittionDate && (
+            <h5 className="orange-text mt-50">
+              submittion Date :
+              <span className="ml-10 teal-text">{`${
+                (new Date(assignmentInfo.submittionDate.toDate()).getHours() %
+                  12 || "12") < 10
+                  ? `0${
+                      new Date(
+                        assignmentInfo.submittionDate.toDate()
+                      ).getHours() % 12 || "12"
+                    }`
+                  : new Date(
+                      assignmentInfo.submittionDate.toDate()
+                    ).getHours() % 12 || "12"
+              } : ${
+                new Date(assignmentInfo.submittionDate.toDate()).getMinutes() <
+                10
+                  ? `0${new Date(
+                      assignmentInfo.submittionDate.toDate()
+                    ).getMinutes()}`
+                  : new Date(
+                      assignmentInfo.submittionDate.toDate()
+                    ).getMinutes()
+              } ${
+                new Date(assignmentInfo.submittionDate.toDate()).getHours() >=
+                12
+                  ? "PM"
+                  : "AM"
+              }`}</span>
+              <span className="ml-10 light-blue-text">{`${new Date(
+                assignmentInfo.submittionDate.toDate()
+              ).getDate()} / ${new Date(
+                assignmentInfo.submittionDate.toDate()
+              ).getMonth()} / ${new Date(
+                assignmentInfo.submittionDate.toDate()
+              ).getFullYear()}`}</span>
+            </h5>
+          )}
+
+          {assignmentInfo.submittedMessage && (
+            <h5 className="green-text mt-50">Answer :</h5>
+          )}
+          {assignmentInfo.submittedMessage && (
+            <blockquote>{assignmentInfo.submittedMessage}</blockquote>
+          )}
 
           {/* /// Remark */}
           <div>

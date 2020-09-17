@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { nanoid } from "nanoid";
+import { toast } from "react-toastify";
 
 const CreateAnnouncement = ({ state, classCode }) => {
   const [announcement, setAnnouncement] = useState("");
@@ -30,17 +31,17 @@ const CreateAnnouncement = ({ state, classCode }) => {
         console.log("Success", result);
         setAnnouncement("");
         setTitle("");
-
-        // setSuccess(true);
+        toast.success("Successfully created");
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Failed to create, Please Try Again");
       });
   };
 
   return (
-    <div>
-      <form>
+    <div className="container">
+      <form className="mt-50">
         <div className="input-field">
           <input
             id="title"
@@ -69,7 +70,7 @@ const CreateAnnouncement = ({ state, classCode }) => {
           </div>
         </div>
 
-        <div className="right-align">
+        <div className="center-align">
           {announcement ? (
             <span
               className="waves-effect waves-light btn-large "

@@ -5,6 +5,7 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const { state } = useContext(UserContext);
@@ -24,6 +25,7 @@ const Login = () => {
       })
       .catch(function (error) {
         console.error("Error writing document: ", error);
+        toast.error("Error writing document: ");
       });
   };
 
@@ -50,9 +52,10 @@ const Login = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container mt-100">
       {!state.user && (
         <StyledFirebaseAuth
+          className=" mt-100 w-100"
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
         />

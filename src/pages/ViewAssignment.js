@@ -5,6 +5,7 @@ import { Col, Row } from "react-materialize";
 import { FaFilePdf } from "react-icons/fa";
 import { nanoid } from "nanoid";
 import { UserContext } from "../context/Context";
+import { toast } from "react-toastify";
 
 const ViewAssignment = ({ match }) => {
   const [assignmentInfo, setAssignmentInfo] = useState({});
@@ -125,6 +126,7 @@ const ViewAssignment = ({ match }) => {
               console.log("downloadURL", tempfiles);
               setFiles(tempfiles);
               setIsUploading(false);
+              toast.success(`${file.name} Uploaded`);
             })
             .catch((err) => console.log(err));
         }
@@ -176,11 +178,13 @@ const ViewAssignment = ({ match }) => {
       .commit()
       .then((result) => {
         console.log("success : ", result);
+        toast.success("Successfully Submitted your assignment");
         setMessage("");
         setFiles([]);
       })
       .catch((err) => {
         console.log("error : ", err);
+        toast.error("Failed, Please Try Again");
       });
   };
 
@@ -302,9 +306,37 @@ const ViewAssignment = ({ match }) => {
             </div>
           ) : (
             <div>
-              <h5>Your Work</h5>
+              <h5 className="mt-50">Your Work</h5>
 
-              <div className="file-field input-field">
+              {/* /// attachments */}
+              <div>
+                <ul className="collection with-header">
+                  {files && files.length > 0 && (
+                    <li className="collection-header">
+                      <h5 className="green-text">Attachments</h5>
+                    </li>
+                  )}
+                  {files &&
+                    files.map((pdf, index) => (
+                      <li key={index} className="collection-item">
+                        <div>
+                          <a
+                            href={pdf.pdfFile}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FaFilePdf size={30} className="left" color="red" />
+                            <span className="valign-wrapper">
+                              {pdf.pdfName}
+                            </span>
+                          </a>
+                        </div>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+
+              <div className="file-field input-field mt-20">
                 <div className="btn">
                   <span>Pdf</span>
                   <input

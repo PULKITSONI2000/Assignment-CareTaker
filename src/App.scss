@@ -19,7 +19,10 @@
     background-color: #ea7773;
   }
 }
-
+.my-50 {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
 .mt-10 {
   margin-top: 10px;
 }
@@ -31,6 +34,9 @@
 }
 .mt-50 {
   margin-top: 50px;
+}
+.mt-100 {
+  margin-top: 100px;
 }
 .ml-10 {
   margin-left: 10px;
@@ -62,21 +68,20 @@
   border-radius: 20px !important;
 }
 .class-box {
-  min-height: 200px;
+  min-height: 160px;
   border-radius: 20px;
   @include randomBGColor();
 
   h2 {
     position: relative;
-    top: 20px;
+    top: 30px;
     left: 30px;
-    bottom: 10px;
   }
 
   p {
-    margin: 0px;
     position: relative;
     left: 40px;
+    top: 20px;
     font-size: 1.3rem;
   }
 }

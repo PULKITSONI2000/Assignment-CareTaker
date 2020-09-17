@@ -3,8 +3,6 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { Col, Row } from "react-materialize";
 import { FaFilePdf } from "react-icons/fa";
-// import { nanoid } from "nanoid";
-// import { UserContext } from "../context/Context";
 
 import M from "materialize-css/dist/js/materialize.min.js";
 import EvaluateStudent from "../components/EvaluateStudent";
@@ -14,8 +12,6 @@ const ViewAssignmentReport = ({ match }) => {
   const [classInfo, setClassInfo] = useState({});
   const [nonSubmitted, setNonSubmitted] = useState([]);
   const [studentToEvaluate, setStudentToEvaluate] = useState();
-
-  // const { state } = useContext(UserContext);
 
   useEffect(() => {
     var unsubscribe = firebase
@@ -77,11 +73,12 @@ const ViewAssignmentReport = ({ match }) => {
     classInfo.students &&
       classInfo.students.forEach((student) => {
         var isFound = false;
-        assignmentInfo.studentSubmittion.forEach((studentSubmit) => {
-          if (student.studentId === studentSubmit.studentId) {
-            isFound = true;
-          }
-        });
+        assignmentInfo.studentSubmittion &&
+          assignmentInfo.studentSubmittion.forEach((studentSubmit) => {
+            if (student.studentId === studentSubmit.studentId) {
+              isFound = true;
+            }
+          });
         if (!isFound) {
           tempNonSubmittion.push(student);
         }
@@ -99,20 +96,21 @@ const ViewAssignmentReport = ({ match }) => {
               <li className="tab">
                 <a href="#allstudents">
                   All Students (
-                  {classInfo.students && classInfo.students.length})
+                  {(classInfo.students && classInfo.students.length) || 0})
                 </a>
               </li>
               <li className="tab ">
                 <a href="#Submitted" className="active">
                   Submitted (
-                  {assignmentInfo.studentSubmittion &&
-                    assignmentInfo.studentSubmittion.length}
+                  {(assignmentInfo.studentSubmittion &&
+                    assignmentInfo.studentSubmittion.length) ||
+                    0}
                   )
                 </a>
               </li>
               <li className="tab ">
                 <a href="#nonSubmitted">
-                  non Submitted ({nonSubmitted && nonSubmitted.length})
+                  non Submitted ({(nonSubmitted && nonSubmitted.length) || 0})
                 </a>
               </li>
             </ul>
@@ -226,21 +224,32 @@ const ViewAssignmentReport = ({ match }) => {
             </h6>
           )}
 
-          <Row className="mt-50 ">
-            {assignmentInfo.assignmentFiles &&
-              assignmentInfo.assignmentFiles.map((pdf, index) => (
-                <Col key={index}>
-                  <a
-                    href={pdf.pdfFile}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FaFilePdf size={70} color="red" /> <br />
-                    {pdf.pdfName}
-                  </a>
-                </Col>
-              ))}
-          </Row>
+          {/* /// attachments */}
+          <div className="mt-10 mb-30">
+            <ul className="collection with-header">
+              {assignmentInfo.assignmentFiles &&
+                assignmentInfo.assignmentFiles.length > 0 && (
+                  <li className="collection-header">
+                    <h5 className="green-text">Attachments</h5>
+                  </li>
+                )}
+              {assignmentInfo.assignmentFiles &&
+                assignmentInfo.assignmentFiles.map((pdf, index) => (
+                  <li key={index} className="collection-item">
+                    <div>
+                      <a
+                        href={pdf.pdfFile}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FaFilePdf size={30} className="left" color="red" />
+                        <span className="valign-wrapper">{pdf.pdfName}</span>
+                      </a>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
         </Col>
         <Col s={12} l={5}>
           <EvaluateStudent student={studentToEvaluate} />

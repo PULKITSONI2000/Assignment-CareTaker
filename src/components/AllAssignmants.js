@@ -37,58 +37,70 @@ const AllAssignmants = ({ classCode }) => {
 
   return (
     <div>
-      <ul className="collection">
-        {assignments.map((assign, index) => (
-          <li key={index} className="collection-item avatar">
-            {/* <i className="material-icons circle red">play_arrow</i> */}
+      {assignments.length > 0 ? (
+        <ul className="collection">
+          {assignments.map((assign, index) => (
+            <li key={index} className="collection-item avatar">
+              {/* <i className="material-icons circle red">play_arrow</i> */}
 
-            {assign.assignmentFiles.length > 0 ? (
-              <i className="circle red">
-                <GrDocumentPdf size={22} color="red" />
-              </i>
-            ) : (
-              <i className="circle blue">
-                <GrDocumentText size={22} color="blue" />
-              </i>
-            )}
+              {assign.assignmentFiles.length > 0 ? (
+                <i className="circle red">
+                  <GrDocumentPdf size={22} color="red" />
+                </i>
+              ) : (
+                <i className="circle blue">
+                  <GrDocumentText size={22} color="blue" />
+                </i>
+              )}
 
-            <Link
-              to={
-                state.teacher
-                  ? `/assignment/report/${assign.assignmentId}`
-                  : `/assignment/${assign.assignmentId}`
-              }
-              className="title"
-            >
-              {assign.name}
-            </Link>
-            <p>
-              Due Date :{"   "}
-              {/* {String(assign.data.dueDate.toDate().getDate())} */}
-              <span className="">{`${
-                (new Date(assign.dueDate.toDate()).getHours() % 12 || "12") < 10
-                  ? `0${
-                      new Date(assign.dueDate.toDate()).getHours() % 12 || "12"
-                    }`
-                  : new Date(assign.dueDate.toDate()).getHours() % 12 || "12"
-              } : ${
-                new Date(assign.dueDate.toDate()).getMinutes() < 10
-                  ? `0${new Date(assign.dueDate.toDate()).getMinutes()}`
-                  : new Date(assign.dueDate.toDate()).getMinutes()
-              } ${
-                new Date(assign.dueDate.toDate()).getHours() >= 12 ? "PM" : "AM"
-              }`}</span>
-              <span className="ml-10">{`${new Date(
-                assign.dueDate.toDate()
-              ).getDate()} / ${new Date(
-                assign.dueDate.toDate()
-              ).getMonth()} / ${new Date(
-                assign.dueDate.toDate()
-              ).getFullYear()}`}</span>
-            </p>
-          </li>
-        ))}
-      </ul>
+              <Link
+                to={
+                  state.teacher
+                    ? `/assignment/report/${assign.assignmentId}`
+                    : `/assignment/${assign.assignmentId}`
+                }
+                className="title"
+              >
+                {assign.name}
+              </Link>
+              <p>
+                Due Date :{"   "}
+                {/* {String(assign.data.dueDate.toDate().getDate())} */}
+                <span className="">{`${
+                  (new Date(assign.dueDate.toDate()).getHours() % 12 || "12") <
+                  10
+                    ? `0${
+                        new Date(assign.dueDate.toDate()).getHours() % 12 ||
+                        "12"
+                      }`
+                    : new Date(assign.dueDate.toDate()).getHours() % 12 || "12"
+                } : ${
+                  new Date(assign.dueDate.toDate()).getMinutes() < 10
+                    ? `0${new Date(assign.dueDate.toDate()).getMinutes()}`
+                    : new Date(assign.dueDate.toDate()).getMinutes()
+                } ${
+                  new Date(assign.dueDate.toDate()).getHours() >= 12
+                    ? "PM"
+                    : "AM"
+                }`}</span>
+                <span className="ml-10">{`${new Date(
+                  assign.dueDate.toDate()
+                ).getDate()} / ${new Date(
+                  assign.dueDate.toDate()
+                ).getMonth()} / ${new Date(
+                  assign.dueDate.toDate()
+                ).getFullYear()}`}</span>
+              </p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>
+          <h4 className="center-align grey-text">
+            No Assignments have been uploaded yet
+          </h4>
+        </div>
+      )}
     </div>
   );
 };

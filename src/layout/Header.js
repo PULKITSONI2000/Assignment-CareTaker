@@ -23,7 +23,6 @@ const Header = ({ history }) => {
   const { state, dispatch } = useContext(UserContext);
   const [teacherEmail, setTeacherEmail] = useState("");
   const [joinClassCode, setjoinClassCode] = useState("");
-  // const [classResult, setClassResult] = useState({});
 
   const handleJoinClass = () => {
     firebase
@@ -72,6 +71,7 @@ const Header = ({ history }) => {
                   type: ADD_CLASSES,
                   payload: classInfo,
                 });
+                joinClassCode("");
               })
               .catch((err) => {
                 console.log(err);
@@ -80,8 +80,6 @@ const Header = ({ history }) => {
           .catch((err) => {
             console.log(err);
           });
-
-        // setClassResult(classInfo);
       })
       .catch((err) => {
         console.log(err);
