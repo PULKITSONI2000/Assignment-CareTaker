@@ -228,46 +228,50 @@ const EvaluateStudent = ({ student }) => {
           )}
 
           {/* /// Remark */}
-          <div>
-            <form>
-              <div className="input-field">
-                <textarea
-                  id="Feedback"
-                  className="materialize-textarea"
-                  value={feedback}
-                  onChange={(e) => {
-                    setFeedback(e.target.value);
-                  }}
-                ></textarea>
-                <label htmlFor="Feedback">Remark/feedback</label>
-              </div>
+          <div className="fg-box">
+            <div className="my-20 p-box">
+              <form>
+                <div className="input-field">
+                  <textarea
+                    id="Feedback"
+                    className="materialize-textarea"
+                    value={feedback}
+                    onChange={(e) => {
+                      setFeedback(e.target.value);
+                    }}
+                  ></textarea>
+                  <label htmlFor="Feedback">Remark/feedback</label>
+                </div>
 
-              <div className="input-field">
-                <input
-                  id="grade"
-                  type="text"
-                  className="validate"
-                  value={grade}
-                  onChange={(e) => {
-                    setGrade(e.target.value);
-                  }}
-                />
-                <label htmlFor="grade">Grade</label>
-              </div>
+                <div className="input-field">
+                  <input
+                    id="grade"
+                    type="text"
+                    className="validate"
+                    value={grade}
+                    onChange={(e) => {
+                      setGrade(e.target.value);
+                    }}
+                  />
+                  <label htmlFor="grade">Grade</label>
+                </div>
 
-              {feedback || grade ? (
-                <span
-                  className="waves-effect waves-light btn center-align"
-                  onClick={onSubmit}
-                >
-                  Send
-                </span>
-              ) : (
-                <span className="waves-effect waves-light btn center-align disabled">
-                  Send
-                </span>
-              )}
-            </form>
+                <div className="center-align">
+                  {feedback || grade ? (
+                    <span
+                      className="waves-effect large waves-light btn center center-align"
+                      onClick={onSubmit}
+                    >
+                      Send
+                    </span>
+                  ) : (
+                    <span className="waves-effect large waves-light btn center-align disabled">
+                      Send
+                    </span>
+                  )}
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}

@@ -1,3 +1,8 @@
+$bg-color: #faeee7;
+$fg-color: #f7d6bf;
+$secondary-color: #4cd3c2;
+$primary-color: #0a97b0;
+
 @mixin randomBGColor() {
   $color: random(8);
 
@@ -19,8 +24,13 @@
     background-color: #ea7773;
   }
 }
+
 .my-50 {
   margin-top: 50px;
+  margin-bottom: 50px;
+}
+.my-20 {
+  margin-top: 20px;
   margin-bottom: 50px;
 }
 .mt-10 {
@@ -64,8 +74,88 @@
   border-radius: 20px 20px 0px 0px;
   @include randomBGColor();
 }
+.card-content {
+  border-radius: 0px 0px 20px 20px !important;
+  background-color: $fg-color;
+}
 .card {
+  background-color: $fg-color;
   border-radius: 20px !important;
+}
+.tabs {
+  background-color: $bg-color !important;
+  border-radius: 15px !important;
+}
+.scroll {
+  height: 87vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.card-content,
+.collection.with-header,
+.collection-header,
+.collection-item {
+  background-color: $fg-color !important;
+}
+.collection.with-header {
+  border-radius: 24px !important;
+  // padding-bottom: 20px;
+}
+.collapsible-header {
+  background-color: $bg-color !important;
+}
+
+.collection .collection-item.avatar {
+  background-color: $bg-color !important;
+}
+
+.collapsible-body {
+  border-bottom: 1px solid $primary-color !important;
+  background-color: $fg-color !important;
+}
+
+.fg-box {
+  background-color: $fg-color;
+  border-radius: 30px !important;
+}
+.p-box {
+  padding: 30px 20px 30px 20px;
+}
+
+.collapsible {
+  border-top: 0px !important;
+  border-right: 0px !important;
+  border-left: 0px !important;
+  margin: 10px !important;
+}
+
+a {
+  color: $secondary-color;
+}
+
+.collapsible-header {
+  border-bottom: 1px solid $primary-color !important;
+}
+.sidenav {
+  background-color: $fg-color !important;
+}
+.background {
+  background-color: $primary-color !important;
+}
+
+.z-depth-1,
+nav,
+.card-panel,
+.card,
+.toast,
+.btn,
+.btn-large,
+.btn-small,
+.btn-floating,
+.dropdown-content,
+.collapsible,
+.sidenav {
+  box-shadow: 0px 0px !important;
 }
 .class-box {
   min-height: 160px;

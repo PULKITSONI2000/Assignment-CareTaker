@@ -1,4 +1,10 @@
+$bg-color: #faeee7;
+$fg-color: #f7d6bf;
+$secondary-color: #4cd3c2;
+$primary-color: #0a97b0;
+
 body {
+  background-color: $bg-color;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -13,6 +19,8 @@ code {
 }
 
 @import "materialize-css/sass/components/_color-variables";
-$primary-color: color("light-blue", "accent-2") !default;
-$secondary-color: color("blue", "darken-4") !default;
+$primary-color: $primary-color !default;
+// color("light-blue", "accent-2") !default;
+$secondary-color: $secondary-color !default;
+// color("blue", "darken-4") !default;
 @import "materialize-css/sass/materialize";

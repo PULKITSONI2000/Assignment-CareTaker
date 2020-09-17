@@ -202,7 +202,7 @@ const ViewAssignment = ({ match }) => {
     <div className="container">
       <Row>
         {console.log(assignmentInfo)}
-        <Col s={12} m={9}>
+        <Col s={12} m={8}>
           <h2 className="underline">{assignmentInfo.name}</h2>
 
           <blockquote className="flow-text mt-50 ">
@@ -283,7 +283,7 @@ const ViewAssignment = ({ match }) => {
             </ul>
           </div>
         </Col>
-        <Col s={12} m={3}>
+        <Col s={12} m={4}>
           {isAssignmentSubmitted() ? (
             <div className="mt-20 ">
               <h4 className="center-align green-text valign-center">
@@ -305,82 +305,88 @@ const ViewAssignment = ({ match }) => {
               )}
             </div>
           ) : (
-            <div>
-              <h5 className="mt-50">Your Work</h5>
+            <div className="fg-box mt-50">
+              <div className="p-box">
+                <h5 className="mt-20">Your Work</h5>
 
-              {/* /// attachments */}
-              <div>
-                <ul className="collection with-header">
-                  {files && files.length > 0 && (
-                    <li className="collection-header">
-                      <h5 className="green-text">Attachments</h5>
-                    </li>
-                  )}
-                  {files &&
-                    files.map((pdf, index) => (
-                      <li key={index} className="collection-item">
-                        <div>
-                          <a
-                            href={pdf.pdfFile}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FaFilePdf size={30} className="left" color="red" />
-                            <span className="valign-wrapper">
-                              {pdf.pdfName}
-                            </span>
-                          </a>
-                        </div>
+                {/* /// attachments */}
+                <div>
+                  <ul className="collection with-header">
+                    {files && files.length > 0 && (
+                      <li className="collection-header">
+                        <h5 className="green-text">Attachments</h5>
                       </li>
-                    ))}
-                </ul>
-              </div>
+                    )}
+                    {files &&
+                      files.map((pdf, index) => (
+                        <li key={index} className="collection-item">
+                          <div>
+                            <a
+                              href={pdf.pdfFile}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <FaFilePdf
+                                size={30}
+                                className="left"
+                                color="red"
+                              />
+                              <span className="valign-wrapper">
+                                {pdf.pdfName}
+                              </span>
+                            </a>
+                          </div>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
 
-              <div className="file-field input-field mt-20">
-                <div className="btn">
-                  <span>Pdf</span>
-                  <input
-                    type="file"
-                    accept="application/pdf"
+                <div className="file-field input-field mt-20">
+                  <div className="btn">
+                    <span>Pdf</span>
+                    <input
+                      type="file"
+                      accept="application/pdf"
+                      onChange={(event) => {
+                        fileHandler(event);
+                      }}
+                    />
+                  </div>
+                  <div className="file-path-wrapper">
+                    <input
+                      className="file-path validate"
+                      accept="application/pdf"
+                      type="text"
+                    />
+                  </div>
+                </div>
+
+                <div className="input-field">
+                  <textarea
+                    id="textarea2"
+                    value={message}
                     onChange={(event) => {
-                      fileHandler(event);
+                      setMessage(event.target.value);
                     }}
-                  />
+                    className="materialize-textarea"
+                  ></textarea>
+                  <label htmlFor="textarea2">Private Message</label>
                 </div>
-                <div className="file-path-wrapper">
-                  <input
-                    className="file-path validate"
-                    accept="application/pdf"
-                    type="text"
-                  />
+
+                <div className="center-align">
+                  {!isUploading && (files.length > 0 || message) ? (
+                    <span
+                      className="waves-effect waves-light btn-large "
+                      onClick={onSubmit}
+                    >
+                      Add Assignment
+                    </span>
+                  ) : (
+                    <span className="waves-effect disabled waves-light btn-large ">
+                      Add Assignment
+                    </span>
+                  )}
                 </div>
-              </div>
-
-              <div className="input-field">
-                <textarea
-                  id="textarea2"
-                  value={message}
-                  onChange={(event) => {
-                    setMessage(event.target.value);
-                  }}
-                  className="materialize-textarea"
-                ></textarea>
-                <label htmlFor="textarea2">Private Message</label>
-              </div>
-
-              <div className="center-align">
-                {!isUploading && (files.length > 0 || message) ? (
-                  <span
-                    className="waves-effect waves-light btn-large "
-                    onClick={onSubmit}
-                  >
-                    Add Assignment
-                  </span>
-                ) : (
-                  <span className="waves-effect disabled waves-light btn-large ">
-                    Add Assignment
-                  </span>
-                )}
               </div>
             </div>
           )}

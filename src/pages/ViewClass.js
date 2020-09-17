@@ -62,7 +62,7 @@ const ViewClass = ({ match }) => {
 
       <div className="mt-20">
         {/* /// Links */}
-        <ul className="tabs tabs-fixed-width tab-demo z-depth-1 center">
+        <ul className="tabs tabs-fixed-width tab-demo  center">
           <li className="tab">
             <a href="#Assignments">Assignments</a>
           </li>
@@ -108,7 +108,7 @@ const ViewClass = ({ match }) => {
         </div>
 
         {state.teacher && (
-          <div id="AddAssignment">
+          <div id="AddAssignment" className="fg-box">
             {classInfo.code && (
               <AddAssignment state={state} classCode={classInfo.code} />
             )}
@@ -116,69 +116,69 @@ const ViewClass = ({ match }) => {
         )}
 
         {state.teacher && (
-          <div id="CreateAnnouncement">
+          <div id="CreateAnnouncement" className="fg-box">
             {classInfo.code && (
               <CreateAnnouncement state={state} classCode={classInfo.code} />
             )}
           </div>
         )}
-        <div id="AboutClass">
-          <div className="container">
+        <div id="AboutClass" className="container fg-box">
+          <div className="my-20 p-box">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <h5>Class Name</h5>
+                    <h6>Class Name</h6>
                   </td>
                   <td>
-                    <h5> : </h5>
+                    <h6> : </h6>
                   </td>
                   <td>
-                    <h5>{classInfo.title}</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Teacher</h5>
-                  </td>
-                  <td>
-                    <h5> : </h5>
-                  </td>
-                  <td>
-                    <h5>{classInfo.teacher}</h5>
+                    <h6>{classInfo.title}</h6>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h5>Subject</h5>
+                    <h6>Teacher</h6>
                   </td>
                   <td>
-                    <h5> : </h5>
+                    <h6> : </h6>
                   </td>
                   <td>
-                    <h5>{classInfo.subject}</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Section</h5>
-                  </td>
-                  <td>
-                    <h5> : </h5>
-                  </td>
-                  <td>
-                    <h5>{classInfo.section}</h5>
+                    <h6>{classInfo.teacher}</h6>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h5>Code</h5>
+                    <h6>Subject</h6>
                   </td>
                   <td>
-                    <h5> : </h5>
+                    <h6> : </h6>
                   </td>
                   <td>
-                    <h5>{classInfo.code}</h5>
+                    <h6>{classInfo.subject}</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h6>Section</h6>
+                  </td>
+                  <td>
+                    <h6> : </h6>
+                  </td>
+                  <td>
+                    <h6>{classInfo.section}</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <h6>Code</h6>
+                  </td>
+                  <td>
+                    <h6> : </h6>
+                  </td>
+                  <td>
+                    <h6>{classInfo.code}</h6>
                   </td>
                 </tr>
               </tbody>

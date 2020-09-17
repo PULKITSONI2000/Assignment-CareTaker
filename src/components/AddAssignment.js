@@ -131,7 +131,7 @@ const AddAssignment = ({ state, classCode }) => {
   return (
     <div className="container ">
       {/* {console.log("files", files)} */}
-      <form className="my-50">
+      <form className="my-20 p-box">
         {/* /// Name */}
         <div className="input-field">
           <input

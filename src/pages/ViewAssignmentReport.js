@@ -91,168 +91,176 @@ const ViewAssignmentReport = ({ match }) => {
     <div>
       <Row>
         <Col s={12} l={3}>
-          <div className="mt-20">
-            <ul className="tabs tabs-fixed-width tab-demo center ">
-              <li className="tab">
-                <a href="#allstudents">
-                  All Students (
-                  {(classInfo.students && classInfo.students.length) || 0})
-                </a>
-              </li>
-              <li className="tab ">
-                <a href="#Submitted" className="active">
-                  Submitted (
-                  {(assignmentInfo.studentSubmittion &&
-                    assignmentInfo.studentSubmittion.length) ||
-                    0}
-                  )
-                </a>
-              </li>
-              <li className="tab ">
-                <a href="#nonSubmitted">
-                  non Submitted ({(nonSubmitted && nonSubmitted.length) || 0})
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div id="allstudents" className="col s12">
-            {/* /// All Students */}
-            <ul className="collection">
-              {classInfo.students &&
-                classInfo.students.map((student, index) => (
-                  <li key={index} className="collection-item avatar">
-                    <img
-                      src={
-                        student.studentPhotoUrl ||
-                        "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                      }
-                      alt="student"
-                      className="circle"
-                    />
-                    <span className="title">{student.studentName}</span>
-                    {/* <p>First Line</p> */}
-                  </li>
-                ))}
-            </ul>
-          </div>
-          <div id="Submitted" className="col s12">
-            {/* /// Submited */}
-            <ul className="collection">
-              {assignmentInfo.studentSubmittion &&
-                assignmentInfo.studentSubmittion.map((student, index) => (
-                  <li
-                    key={index}
-                    className="collection-item avatar pointer"
-                    onClick={() => {
-                      setStudentToEvaluate(student);
-                    }}
-                  >
-                    <img
-                      src={
-                        student.studentPhotoUrl ||
-                        "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                      }
-                      alt="student"
-                      className="circle"
-                    />
-                    <span className="title">
-                      {student.studentName}{" "}
-                      <span className="right">{student.marks}</span>
-                    </span>
-                    {/* <p>First Line</p> */}
-                  </li>
-                ))}
-            </ul>
-          </div>
+          <div className="scroll">
+            <div className="mt-20">
+              <ul className="tabs tabs-fixed-width tab-demo center ">
+                <li className="tab">
+                  <a href="#allstudents">
+                    All Students (
+                    {(classInfo.students && classInfo.students.length) || 0})
+                  </a>
+                </li>
+                <li className="tab ">
+                  <a href="#Submitted" className="active">
+                    Submitted (
+                    {(assignmentInfo.studentSubmittion &&
+                      assignmentInfo.studentSubmittion.length) ||
+                      0}
+                    )
+                  </a>
+                </li>
+                <li className="tab ">
+                  <a href="#nonSubmitted">
+                    non Submitted ({(nonSubmitted && nonSubmitted.length) || 0})
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div id="allstudents" className="col s12">
+              {/* /// All Students */}
+              <ul className="collection">
+                {classInfo.students &&
+                  classInfo.students.map((student, index) => (
+                    <li key={index} className="collection-item avatar">
+                      <img
+                        src={
+                          student.studentPhotoUrl ||
+                          "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                        }
+                        alt="student"
+                        className="circle"
+                      />
+                      <span className="title">{student.studentName}</span>
+                      {/* <p>First Line</p> */}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+            <div id="Submitted" className="col s12">
+              {/* /// Submited */}
+              <ul className="collection">
+                {assignmentInfo.studentSubmittion &&
+                  assignmentInfo.studentSubmittion.map((student, index) => (
+                    <li
+                      key={index}
+                      className="collection-item avatar pointer"
+                      onClick={() => {
+                        setStudentToEvaluate(student);
+                      }}
+                    >
+                      <img
+                        src={
+                          student.studentPhotoUrl ||
+                          "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                        }
+                        alt="student"
+                        className="circle"
+                      />
+                      <span className="title">
+                        {student.studentName}{" "}
+                        <span className="right">{student.marks}</span>
+                      </span>
+                      {/* <p>First Line</p> */}
+                    </li>
+                  ))}
+              </ul>
+            </div>
 
-          <div id="nonSubmitted" className="col s12">
-            {/* /// nonSubmitted */}
-            <ul className="collection">
-              {nonSubmitted &&
-                nonSubmitted.map((student, index) => (
-                  <li key={index} className="collection-item avatar">
-                    <img
-                      src={
-                        student.studentPhotoUrl ||
-                        "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                      }
-                      alt="student"
-                      className="circle"
-                    />
-                    <span className="title">{student.studentName}</span>
-                    {/* <p>First Line</p> */}
-                  </li>
-                ))}
-            </ul>
-          </div>
+            <div id="nonSubmitted" className="col s12">
+              {/* /// nonSubmitted */}
+              <ul className="collection">
+                {nonSubmitted &&
+                  nonSubmitted.map((student, index) => (
+                    <li key={index} className="collection-item avatar">
+                      <img
+                        src={
+                          student.studentPhotoUrl ||
+                          "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                        }
+                        alt="student"
+                        className="circle"
+                      />
+                      <span className="title">{student.studentName}</span>
+                      {/* <p>First Line</p> */}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </div>{" "}
         </Col>
         <Col s={12} l={4}>
-          <h2 className="underline">{assignmentInfo.name}</h2>
+          <div className="scroll">
+            <h2 className="underline">{assignmentInfo.name}</h2>
 
-          <blockquote className="flow-text mt-50 ">
-            {assignmentInfo.description}
-          </blockquote>
+            <blockquote className="flow-text mt-50 ">
+              {assignmentInfo.description}
+            </blockquote>
 
-          {assignmentInfo.dueDate && (
-            <h6 className="flow-text mt-50 ">
-              Due Data :
-              <span className="ml-10 teal-text">{`${
-                (new Date(assignmentInfo.dueDate.toDate()).getHours() % 12 ||
-                  "12") < 10
-                  ? `0${
-                      new Date(assignmentInfo.dueDate.toDate()).getHours() %
+            {assignmentInfo.dueDate && (
+              <h6 className="flow-text mt-50 ">
+                Due Data :
+                <span className="ml-10 teal-text">{`${
+                  (new Date(assignmentInfo.dueDate.toDate()).getHours() % 12 ||
+                    "12") < 10
+                    ? `0${
+                        new Date(assignmentInfo.dueDate.toDate()).getHours() %
+                          12 || "12"
+                      }`
+                    : new Date(assignmentInfo.dueDate.toDate()).getHours() %
                         12 || "12"
-                    }`
-                  : new Date(assignmentInfo.dueDate.toDate()).getHours() % 12 ||
-                    "12"
-              } : ${
-                new Date(assignmentInfo.dueDate.toDate()).getMinutes() < 10
-                  ? `0${new Date(assignmentInfo.dueDate.toDate()).getMinutes()}`
-                  : new Date(assignmentInfo.dueDate.toDate()).getMinutes()
-              } ${
-                new Date(assignmentInfo.dueDate.toDate()).getHours() >= 12
-                  ? "PM"
-                  : "AM"
-              }`}</span>
-              <span className="ml-10 light-blue-text">{`${new Date(
-                assignmentInfo.dueDate.toDate()
-              ).getDate()} / ${new Date(
-                assignmentInfo.dueDate.toDate()
-              ).getMonth()} / ${new Date(
-                assignmentInfo.dueDate.toDate()
-              ).getFullYear()}`}</span>
-            </h6>
-          )}
+                } : ${
+                  new Date(assignmentInfo.dueDate.toDate()).getMinutes() < 10
+                    ? `0${new Date(
+                        assignmentInfo.dueDate.toDate()
+                      ).getMinutes()}`
+                    : new Date(assignmentInfo.dueDate.toDate()).getMinutes()
+                } ${
+                  new Date(assignmentInfo.dueDate.toDate()).getHours() >= 12
+                    ? "PM"
+                    : "AM"
+                }`}</span>
+                <span className="ml-10 light-blue-text">{`${new Date(
+                  assignmentInfo.dueDate.toDate()
+                ).getDate()} / ${new Date(
+                  assignmentInfo.dueDate.toDate()
+                ).getMonth()} / ${new Date(
+                  assignmentInfo.dueDate.toDate()
+                ).getFullYear()}`}</span>
+              </h6>
+            )}
 
-          {/* /// attachments */}
-          <div className="mt-10 mb-30">
-            <ul className="collection with-header">
-              {assignmentInfo.assignmentFiles &&
-                assignmentInfo.assignmentFiles.length > 0 && (
-                  <li className="collection-header">
-                    <h5 className="green-text">Attachments</h5>
-                  </li>
-                )}
-              {assignmentInfo.assignmentFiles &&
-                assignmentInfo.assignmentFiles.map((pdf, index) => (
-                  <li key={index} className="collection-item">
-                    <div>
-                      <a
-                        href={pdf.pdfFile}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <FaFilePdf size={30} className="left" color="red" />
-                        <span className="valign-wrapper">{pdf.pdfName}</span>
-                      </a>
-                    </div>
-                  </li>
-                ))}
-            </ul>
+            {/* /// attachments */}
+            <div className="mt-10 mb-30">
+              <ul className="collection with-header">
+                {assignmentInfo.assignmentFiles &&
+                  assignmentInfo.assignmentFiles.length > 0 && (
+                    <li className="collection-header">
+                      <h5 className="green-text">Attachments</h5>
+                    </li>
+                  )}
+                {assignmentInfo.assignmentFiles &&
+                  assignmentInfo.assignmentFiles.map((pdf, index) => (
+                    <li key={index} className="collection-item">
+                      <div>
+                        <a
+                          href={pdf.pdfFile}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FaFilePdf size={30} className="left" color="red" />
+                          <span className="valign-wrapper">{pdf.pdfName}</span>
+                        </a>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
           </div>
         </Col>
         <Col s={12} l={5}>
-          <EvaluateStudent student={studentToEvaluate} />
+          <div className="scroll">
+            <EvaluateStudent student={studentToEvaluate} />
+          </div>
         </Col>
       </Row>
     </div>

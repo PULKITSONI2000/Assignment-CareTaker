@@ -219,7 +219,7 @@ const Header = ({ history }) => {
       <ul id="slide-out" className="sidenav">
         <li>
           <div className="user-view">
-            <div className="background cyan">
+            <div className="background">
               {/* <img src="images/office.jpg" /> */}
             </div>
             {state.user && (

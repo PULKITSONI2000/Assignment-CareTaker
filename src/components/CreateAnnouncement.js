@@ -41,7 +41,7 @@ const CreateAnnouncement = ({ state, classCode }) => {
 
   return (
     <div className="container">
-      <form className="mt-50">
+      <form className="my-20 p-box">
         <div className="input-field">
           <input
             id="title"
