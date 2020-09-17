@@ -34,7 +34,6 @@ import "react-toastify/dist/ReactToastify.css";
 firebase.initializeApp(firebaseConfig);
 
 function App() {
-  // console.log("Key", firebaseConfig);
   return (
     <div>
       <ContextsProvider>
