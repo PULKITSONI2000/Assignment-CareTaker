@@ -154,6 +154,7 @@ const Header = ({ history }) => {
               </li>
             )}
             {state.user.uid &&
+              state.user.emailVerified &&
               (state.teacher ? (
                 /// Create Class
                 <li className="right">
@@ -287,7 +288,7 @@ const Header = ({ history }) => {
             <Link to={"/"}>Classes</Link>
           </li>
         )}
-        {state.user && state.teacher && (
+        {state.user && state.user.emailVerified && state.teacher && (
           <li>
             <Link to={"/class/create"}>Create Class</Link>
           </li>
@@ -297,13 +298,18 @@ const Header = ({ history }) => {
             <Link to={"/login"}>Login</Link>
           </li>
         )}
+        {!state.user && (
+          <li>
+            <Link to={"/signup"}>Sign Up</Link>
+          </li>
+        )}
         <li>
           <div className="divider"></div>
         </li>
 
         <li>
           {/* TODO: only for admin */}
-          {state.teacher && (
+          {state.teacher && state.user.emailVerified && (
             <Link to={"/"} data-target="addTeacher" className=" modal-trigger">
               Add Teacher
             </Link>

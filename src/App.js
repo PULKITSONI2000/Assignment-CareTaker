@@ -29,6 +29,7 @@ import PageNotFound from "./pages/PageNotFound";
 import ViewAssignmentReport from "./pages/ViewAssignmentReport";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SignUp from "./pages/SignUp";
 
 // init firebase
 firebase.initializeApp(firebaseConfig);
@@ -54,6 +55,7 @@ function App() {
             <Route exact path="/" component={Home} />
 
             <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
 
             <PrivateTeacherRoute
               exact

@@ -19,6 +19,8 @@ const ContextsProvider = ({ children }) => {
       // // TODO: remove
       // console.log("User Auth", userAuthStatus);
       if (userAuthStatus) {
+        // console.log("varifued", userAuthStatus.emailVerified);
+
         userAuthStatus.getIdTokenResult().then((idTokenResult) => {
           dispatch({
             type: SET_TEACHER,
