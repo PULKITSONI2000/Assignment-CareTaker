@@ -13,9 +13,9 @@ import { ADD_CLASSES, SET_TEACHER, SET_USER } from "../context/action.types";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
-    return { color: "#222222" };
+    return { color: "#faeee7" };
   } else {
-    return { color: "#888888" };
+    return { color: "#f7d6bf" };
   }
 };
 
@@ -101,13 +101,15 @@ const Header = ({ history }) => {
           <Link to={"/"} className="brand-logo center">
             Logo
           </Link>
-
+          {/* /// Menu */}
           <span data-target="slide-out" className="sidenav-trigger">
             <BiMenu size={30} className="mt-10 pointer" />
           </span>
 
+          {/* /// Navbar */}
           <ul id="nav-mobile" className="">
             {!state.user ? (
+              /// Login
               <li className="right">
                 <Link
                   className="valign-wrapper"
@@ -119,30 +121,41 @@ const Header = ({ history }) => {
                 </Link>
               </li>
             ) : (
-              <li className="right">
+              /// Signout
+              <li
+                className="right"
+                onClick={() => {
+                  firebase.auth().signOut();
+                  dispatch({
+                    type: SET_USER,
+                    payload: false,
+                  });
+                  dispatch({
+                    type: SET_TEACHER,
+                    payload: false,
+                  });
+                }}
+              >
                 <Link to="/login" className="valign-wrapper">
-                  <span
-                    className="waves-effect  red-text"
-                    onClick={() => {
-                      firebase.auth().signOut();
-                      dispatch({
-                        type: SET_USER,
-                        payload: false,
-                      });
-                      dispatch({
-                        type: SET_TEACHER,
-                        payload: false,
-                      });
-                    }}
-                  >
+                  <span className="waves-effect hide-on-small-only red-text">
                     Log Out
                   </span>
-                  <BiLogIn color="red" size={30} />
+                  <BiLogIn
+                    color="red"
+                    className="hide-on-small-only"
+                    size={30}
+                  />
+                  <BiLogIn
+                    color="red"
+                    className="mt-10 hide-on-med-and-up"
+                    size={30}
+                  />
                 </Link>
               </li>
             )}
             {state.user.uid &&
               (state.teacher ? (
+                /// Create Class
                 <li className="right">
                   <Link
                     className="valign-wrapper"
@@ -150,10 +163,12 @@ const Header = ({ history }) => {
                     to="/class/create"
                   >
                     <span className="hide-on-small-only">Create Class</span>
-                    <BiBookAdd size={30} />
+                    <BiBookAdd size={30} className="hide-on-small-only" />
+                    <BiBookAdd size={30} className="mt-10 hide-on-med-and-up" />
                   </Link>
                 </li>
               ) : (
+                /// Join Class
                 <li className="right">
                   <Link
                     to={"/"}
@@ -162,7 +177,8 @@ const Header = ({ history }) => {
                     className="valign-wrapper modal-trigger"
                   >
                     <span className="hide-on-small-only">Join Class</span>
-                    <BiBookAdd size={30} />
+                    <BiBookAdd size={30} className="hide-on-small-only" />
+                    <BiBookAdd size={30} className="mt-10 hide-on-med-and-up" />
                   </Link>
                 </li>
               ))}
@@ -216,6 +232,7 @@ const Header = ({ history }) => {
         </div>
       </div>
 
+      {/* /// Side Nav */}
       <ul id="slide-out" className="sidenav">
         <li>
           <div className="user-view">
@@ -238,8 +255,17 @@ const Header = ({ history }) => {
               </Link>
             )}
             <Link to={"/"}>
-              {state.user && state.user.photoURL && (
-                <img className="circle" alt="" src={state.user.photoURL} />
+              {state.user && (
+                // <img className="circle" alt="" src={state.user.photoURL} />
+                <img
+                  src={
+                    state.user.photoURL ||
+                    "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                  }
+                  width={"20%"}
+                  alt="student"
+                  className="circle"
+                />
               )}
             </Link>
             <Link to={"/"}>
@@ -258,7 +284,7 @@ const Header = ({ history }) => {
         </li>
         {state.user && (
           <li>
-            <Link to={"/classes"}>Classes</Link>
+            <Link to={"/"}>Classes</Link>
           </li>
         )}
         {state.user && state.teacher && (

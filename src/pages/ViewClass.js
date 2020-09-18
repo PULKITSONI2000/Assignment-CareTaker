@@ -49,7 +49,7 @@ const ViewClass = ({ match }) => {
 
       <div>
         <div className="class-box">
-          <h2>{classInfo.title}</h2>
+          <h2 className="capitalize">{classInfo.title}</h2>
           {/* <p className="t-20">Teacher : {classInfo.teacher}</p>
           {classInfo.subject && <p>Subject : {classInfo.subject}</p>} */}
           {/* {classInfo.section && <p>Section : {classInfo.section}</p>} */}
@@ -124,7 +124,7 @@ const ViewClass = ({ match }) => {
         )}
         <div id="AboutClass" className="container fg-box">
           <div className="my-20 p-box">
-            <table>
+            <table className="striped">
               <tbody>
                 <tr>
                   <td>

@@ -116,10 +116,12 @@ const ViewAssignmentReport = ({ match }) => {
                 </li>
               </ul>
             </div>
+
             <div id="allstudents" className="col s12">
               {/* /// All Students */}
               <ul className="collection">
-                {classInfo.students &&
+                {classInfo.students && classInfo.students.length > 0 ? (
+                  classInfo.students &&
                   classInfo.students.map((student, index) => (
                     <li key={index} className="collection-item avatar">
                       <img
@@ -133,13 +135,19 @@ const ViewAssignmentReport = ({ match }) => {
                       <span className="title">{student.studentName}</span>
                       {/* <p>First Line</p> */}
                     </li>
-                  ))}
+                  ))
+                ) : (
+                  <h4 className="center-align grey-text">No Students</h4>
+                )}
               </ul>
             </div>
+
             <div id="Submitted" className="col s12">
               {/* /// Submited */}
               <ul className="collection">
                 {assignmentInfo.studentSubmittion &&
+                assignmentInfo.studentSubmittion.length > 0 ? (
+                  assignmentInfo.studentSubmittion &&
                   assignmentInfo.studentSubmittion.map((student, index) => (
                     <li
                       key={index}
@@ -162,7 +170,10 @@ const ViewAssignmentReport = ({ match }) => {
                       </span>
                       {/* <p>First Line</p> */}
                     </li>
-                  ))}
+                  ))
+                ) : (
+                  <h4 className="center-align grey-text">No Student</h4>
+                )}
               </ul>
             </div>
 
@@ -170,27 +181,33 @@ const ViewAssignmentReport = ({ match }) => {
               {/* /// nonSubmitted */}
               <ul className="collection">
                 {nonSubmitted &&
-                  nonSubmitted.map((student, index) => (
-                    <li key={index} className="collection-item avatar">
-                      <img
-                        src={
-                          student.studentPhotoUrl ||
-                          "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                        }
-                        alt="student"
-                        className="circle"
-                      />
-                      <span className="title">{student.studentName}</span>
-                      {/* <p>First Line</p> */}
-                    </li>
+                  (nonSubmitted && nonSubmitted.length > 0 ? (
+                    nonSubmitted.map((student, index) => (
+                      <li key={index} className="collection-item avatar">
+                        <img
+                          src={
+                            student.studentPhotoUrl ||
+                            "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                          }
+                          alt="student"
+                          className="circle"
+                        />
+                        <span className="title">{student.studentName}</span>
+                        {/* <p>First Line</p> */}
+                      </li>
+                    ))
+                  ) : (
+                    <h5 className="center-align grey-text">No Student</h5>
                   ))}
               </ul>
             </div>
-          </div>{" "}
+          </div>
         </Col>
         <Col s={12} l={4}>
           <div className="scroll">
-            <h2 className="underline">{assignmentInfo.name}</h2>
+            <h2 className="underline primary bold capitalize">
+              {assignmentInfo.name}
+            </h2>
 
             <blockquote className="flow-text mt-50 ">
               {assignmentInfo.description}

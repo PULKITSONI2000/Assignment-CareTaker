@@ -25,6 +25,13 @@ $primary-color: #0a97b0;
   }
 }
 
+.primary {
+  color: $primary-color;
+}
+.secondary {
+  color: $secondary-color;
+}
+
 .my-50 {
   margin-top: 50px;
   margin-bottom: 50px;
@@ -77,9 +84,13 @@ $primary-color: #0a97b0;
 .card-content {
   border-radius: 0px 0px 20px 20px !important;
   background-color: $fg-color;
+  color: $primary-color !important;
+  text-transform: capitalize;
 }
-.card {
-  background-color: $fg-color;
+
+.card,
+.card-reveal {
+  background-color: $fg-color !important;
   border-radius: 20px !important;
 }
 .tabs {
@@ -87,10 +98,16 @@ $primary-color: #0a97b0;
   border-radius: 15px !important;
 }
 .scroll {
-  height: 87vh;
+  max-height: 87vh;
   overflow-x: hidden;
   overflow-y: auto;
 }
+.vcenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .card-content,
 .collection.with-header,
 .collection-header,
@@ -99,7 +116,7 @@ $primary-color: #0a97b0;
 }
 .collection.with-header {
   border-radius: 24px !important;
-  // padding-bottom: 20px;
+  padding-bottom: 13px;
 }
 .collapsible-header {
   background-color: $bg-color !important;
@@ -175,6 +192,13 @@ nav,
     font-size: 1.3rem;
   }
 }
+.capitalize {
+  text-transform: capitalize;
+}
+.bold {
+  font-weight: bold;
+  font-style: italic;
+}
 
 .underline {
   text-decoration: underline;
@@ -186,4 +210,32 @@ nav,
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+/* label color */
+.input-field label {
+  color: $primary-color;
+}
+/* label focus color */
+.input-field input[type="text"]:focus + label {
+  color: $secondary-color;
+}
+/* label underline focus color */
+.input-field input[type="text"]:focus {
+  border-bottom: 1px solid $primary-color;
+  box-shadow: 0 1px 0 0 $secondary-color;
+}
+/* valid color */
+.input-field input[type="text"].valid {
+  border-bottom: 1px solid #000;
+  box-shadow: 0 1px 0 0 #000;
+}
+/* invalid color */
+.input-field input[type="text"].invalid {
+  border-bottom: 1px solid #000;
+  box-shadow: 0 1px 0 0 #000;
+}
+/* icon prefix focus color */
+.input-field .prefix.active {
+  color: #000;
 }

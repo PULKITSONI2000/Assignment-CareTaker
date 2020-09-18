@@ -20,8 +20,6 @@ const ContextsProvider = ({ children }) => {
       // console.log("User Auth", userAuthStatus);
       if (userAuthStatus) {
         userAuthStatus.getIdTokenResult().then((idTokenResult) => {
-          console.log("Teacher ", idTokenResult.claims.teacher || false);
-
           dispatch({
             type: SET_TEACHER,
             payload: idTokenResult.claims.teacher || false,

@@ -15,7 +15,6 @@ const EvaluateStudent = ({ student }) => {
   const { state } = useContext(UserContext);
 
   useEffect(() => {
-    console.log(student);
     student &&
       firebase
         .firestore()
@@ -23,7 +22,6 @@ const EvaluateStudent = ({ student }) => {
         .doc(student.submittionId)
         .get()
         .then((doc) => {
-          console.log(doc.data());
           setAssignmentInfo(doc.data());
           setGrade(doc.data().marks || "");
           M.updateTextFields();
@@ -114,25 +112,6 @@ const EvaluateStudent = ({ student }) => {
         console.log(err);
         toast.error("Failed, Please Try Again");
       });
-
-    /// update in class assignment
-    // batch.update(
-    //   db
-    //     .collection("user")
-    //     .doc(assignmentInfo.teacherId)
-    //     .collection("classes")
-    //     .doc(assignmentInfo.classCode)
-    //     .collection("assignment")
-    //     .doc(assignmentInfo.assignmentId),
-    //   {
-    //     studentSubmittion: firebase.firestore.FieldValue.arrayUnion({
-    //       studentId: state.user.uid,
-    //       studentName: state.user.displayName,
-    //       studentPhotoUrl: state.user.photoURL,
-    //       submittionId: code,
-    //     }),
-    //   }
-    // );
   };
 
   return (
@@ -151,7 +130,7 @@ const EvaluateStudent = ({ student }) => {
               alt="student"
               className="circle"
             />
-            <h4>{student.studentName}</h4>
+            <h4 className="primary">{student.studentName}</h4>
           </div>
 
           {/* /// attachments */}
@@ -181,9 +160,10 @@ const EvaluateStudent = ({ student }) => {
             </ul>
           </div>
 
+          {/* /// Submition date */}
           {assignmentInfo.submittionDate && (
-            <h5 className="orange-text mt-50">
-              submittion Date :
+            <h6 className="orange-text mt-50">
+              Submittion Date :
               <span className="ml-10 teal-text">{`${
                 (new Date(assignmentInfo.submittionDate.toDate()).getHours() %
                   12 || "12") < 10
@@ -217,7 +197,7 @@ const EvaluateStudent = ({ student }) => {
               ).getMonth()} / ${new Date(
                 assignmentInfo.submittionDate.toDate()
               ).getFullYear()}`}</span>
-            </h5>
+            </h6>
           )}
 
           {assignmentInfo.submittedMessage && (

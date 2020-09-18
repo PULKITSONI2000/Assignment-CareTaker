@@ -228,7 +228,7 @@ const AddAssignment = ({ state, classCode }) => {
         <div className="mt-20">
           <Row>
             <Col>
-              <h6>Date :</h6>
+              <h6 className="secondary">Date :</h6>
               <DatePicker
                 id="assignmentDueDate"
                 options={{
@@ -246,7 +246,7 @@ const AddAssignment = ({ state, classCode }) => {
             <Col>
               {assignmentDueDate && (
                 <>
-                  <h6>Time :</h6>
+                  <h6 className="secondary">Time :</h6>
 
                   <TimePicker
                     id="assignmentDueTime"
