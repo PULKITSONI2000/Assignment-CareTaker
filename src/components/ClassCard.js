@@ -8,13 +8,19 @@ const ClassCard = ({ classInfo }) => {
         <div className="card-image waves-effect waves-block waves-light">
           {/* <img class="activator" src="images/office.jpg"/> */}
           <div className={`card-design bg-${Math.floor(Math.random() * 10)}`}>
-            <span className="card-title capitalize bold">
+            <span
+              style={{ fontWeight: "bold" }}
+              className="card-title capitalize bold"
+            >
               {classInfo.title}
             </span>
           </div>
         </div>
         <div className="card-content">
-          <span className="card-title activator">
+          <span
+            className="card-title activator bold"
+            style={{ fontWeight: "bold" }}
+          >
             {classInfo.subject}
             <i className="material-icons right">more_vert</i>
           </span>
