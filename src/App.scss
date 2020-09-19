@@ -25,11 +25,49 @@ $primary-color: #0a97b0;
   }
 }
 
+.bg-0 {
+  background-color: #1287a5;
+}
+.bg-1 {
+  background-color: #1287a5;
+}
+.bg-2 {
+  background-color: #487eb0;
+}
+.bg-3 {
+  background-color: #0a79df;
+}
+.bg-4 {
+  background-color: #0a97b0;
+}
+.bg-5 {
+  background-color: #67e6dc;
+}
+.bg-6 {
+  background-color: #00cccd;
+}
+.bg-7 {
+  background-color: #bb2cd9;
+}
+.bg-8 {
+  background-color: #01cbc6;
+}
+.bg-9 {
+  background-color: #ea7773;
+}
+
 .primary {
   color: $primary-color;
 }
 .secondary {
   color: $secondary-color;
+}
+
+.modal-content {
+  background-color: $bg-color;
+}
+.modal-footer {
+  background-color: $fg-color !important;
 }
 
 .my-50 {
@@ -42,6 +80,9 @@ $primary-color: #0a97b0;
 }
 .mt-10 {
   margin-top: 10px;
+}
+.mt-0 {
+  margin-top: 0px;
 }
 .mt-20 {
   margin-top: 20px;
@@ -79,7 +120,7 @@ $primary-color: #0a97b0;
 .card-design {
   height: 140px;
   border-radius: 20px 20px 0px 0px;
-  @include randomBGColor();
+  // @include randomBGColor();
 }
 .card-content {
   border-radius: 0px 0px 20px 20px !important;
@@ -177,8 +218,7 @@ nav,
 .class-box {
   min-height: 160px;
   border-radius: 20px;
-  @include randomBGColor();
-
+  background-color: $fg-color;
   h2 {
     position: relative;
     top: 30px;

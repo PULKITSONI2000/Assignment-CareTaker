@@ -61,14 +61,14 @@ const AllAnnouncements = ({ userId, isTeacher, classCode }) => {
         {announcements.length > 0 ? (
           announcements.map((announcement, index) => (
             <li key={index}>
-              <div className="collapsible-header">
+              <h5 className="collapsible-header primary">
                 {/* <i className="material-icons">filter_drama</i> */}
                 {announcement.announcementTitle}
                 <span className="right-align grey-text ml-10">
                   ~{announcement.teacher}
                 </span>
-              </div>
-              <div className="collapsible-body">
+              </h5>
+              <h6 className="collapsible-body primary">
                 <span>{announcement.announcementDetails}</span>
                 {isTeacher && (
                   <span
@@ -80,7 +80,7 @@ const AllAnnouncements = ({ userId, isTeacher, classCode }) => {
                     Delete
                   </span>
                 )}
-              </div>
+              </h6>
             </li>
           ))
         ) : (

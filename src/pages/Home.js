@@ -16,13 +16,13 @@ const Home = () => {
 
   const verifyEmail = () => {
     if (!state.user.emailVerified) {
-      console.log("mail");
       firebase
         .auth()
         .currentUser.sendEmailVerification()
         .then(function () {
-          console.log("mailsend");
-          toast.success("Verification Mail has been Send");
+          toast.success("Verification Mail has been Send", {
+            onClose: () => <Redirect to="/home" />,
+          });
         })
         .catch(function (error) {
           toast.error(`Error while setting displayName, ${error.message}`);
@@ -36,7 +36,7 @@ const Home = () => {
         {state.classes.length <= 0 ? (
           <div>
             <h2 className="center-align w-100 grey-text ">
-              {state.teacher ? "No Class created yet" : "No class Join yet"}
+              {"Welcome to ///school Name///"}
             </h2>
             <br />
             <h4 className=" center-align w-100 grey-text ">
@@ -58,7 +58,7 @@ const Home = () => {
                     className="waves-effect waves-light btn-large center-align mt-10"
                     onClick={verifyEmail}
                   >
-                    Button
+                    Verify Email
                   </button>
                 </div>
               </div>

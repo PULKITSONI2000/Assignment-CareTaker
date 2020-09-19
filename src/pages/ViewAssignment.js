@@ -258,29 +258,34 @@ const ViewAssignment = ({ match }) => {
 
           {/* /// attachments */}
           <div className="mt-50">
-            <ul className="collection with-header">
-              {assignmentInfo.assignmentFiles &&
-                assignmentInfo.assignmentFiles.length > 0 && (
-                  <li className="collection-header">
-                    <h5 className="green-text">Attachments</h5>
-                  </li>
-                )}
-              {assignmentInfo.assignmentFiles &&
-                assignmentInfo.assignmentFiles.map((pdf, index) => (
-                  <li key={index} className="collection-item">
-                    <div>
-                      <a
-                        href={pdf.pdfFile}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <FaFilePdf size={30} className="left" color="red" />
-                        <span className="valign-wrapper">{pdf.pdfName}</span>
-                      </a>
-                    </div>
-                  </li>
-                ))}
-            </ul>
+            {assignmentInfo.assignmentFiles &&
+              assignmentInfo.assignmentFiles.length > 0 && (
+                <ul className="collection with-header">
+                  {assignmentInfo.assignmentFiles &&
+                    assignmentInfo.assignmentFiles.length > 0 && (
+                      <li className="collection-header">
+                        <h5 className="green-text">Attachments</h5>
+                      </li>
+                    )}
+                  {assignmentInfo.assignmentFiles &&
+                    assignmentInfo.assignmentFiles.map((pdf, index) => (
+                      <li key={index} className="collection-item">
+                        <div>
+                          <a
+                            href={pdf.pdfFile}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FaFilePdf size={30} className="left" color="red" />
+                            <span className="valign-wrapper">
+                              {pdf.pdfName}
+                            </span>
+                          </a>
+                        </div>
+                      </li>
+                    ))}
+                </ul>
+              )}
           </div>
         </Col>
         <Col s={12} m={4}>
@@ -297,7 +302,8 @@ const ViewAssignment = ({ match }) => {
                 <ul className="collection">
                   {submittionInfo.remark.map((remark, index) => (
                     <li key={index} className="collection-item">
-                      {remark.feedback}{" "}
+                      {remark.feedback}
+                      {"  "}
                       <span className="grey-text right">~{remark.teacher}</span>
                     </li>
                   ))}

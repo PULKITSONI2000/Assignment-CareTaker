@@ -39,79 +39,146 @@ const EvaluateStudent = ({ student }) => {
 
     /// update in SubmittedAssignment
 
-    db.collection("SubmittedAssignment")
-      .doc(student.submittionId)
-      .update({
-        remark: firebase.firestore.FieldValue.arrayUnion({
-          feedback: feedback,
-          teacher: state.user.displayName,
-          // date: firebase.firestore.FieldValue.serverTimestamp(),
-        }),
-        marks: grade,
-      })
-      .then(() => {
-        console.log("Success");
+    if (feedback) {
+      db.collection("SubmittedAssignment")
+        .doc(student.submittionId)
+        .update({
+          remark: firebase.firestore.FieldValue.arrayUnion({
+            feedback: feedback,
+            teacher: state.user.displayName,
+            // date: firebase.firestore.FieldValue.serverTimestamp(),
+          }),
+          marks: grade,
+        })
+        .then(() => {
+          var sfDocRef = db
+            .collection("user")
+            .doc(assignmentInfo.teacherId)
+            .collection("classes")
+            .doc(assignmentInfo.classCode)
+            .collection("assignment")
+            .doc(assignmentInfo.assignmentId);
 
-        var sfDocRef = db
-          .collection("user")
-          .doc(assignmentInfo.teacherId)
-          .collection("classes")
-          .doc(assignmentInfo.classCode)
-          .collection("assignment")
-          .doc(assignmentInfo.assignmentId);
+          return db
+            .runTransaction(function (transaction) {
+              // This code may get re-run multiple times if there are conflicts.
+              return transaction.get(sfDocRef).then(function (sfDoc) {
+                if (!sfDoc.exists) {
+                  throw new Error("Document does not exist!");
+                }
 
-        return db
-          .runTransaction(function (transaction) {
-            // This code may get re-run multiple times if there are conflicts.
-            return transaction.get(sfDocRef).then(function (sfDoc) {
-              if (!sfDoc.exists) {
-                throw new Error("Document does not exist!");
-              }
+                var studentSubmittion = sfDoc.data().studentSubmittion;
+                var updatedSubmittion = studentSubmittion.map((student) => {
+                  if (student.studentId === assignmentInfo.studentId) {
+                    // student.remark.length &&
+                    //   student.remark.push({
+                    //     feedback: feedback,
+                    //     teacher: state.user.displayName,
+                    //   });
+                    return {
+                      ...student,
+                      // remark: student.remark
+                      //   ? student.remark
+                      //   : [
+                      //       {
+                      //         feedback: feedback,
+                      //         teacher: state.user.displayName,
+                      //       },
+                      //     ],
+                      marks: grade,
+                    };
+                  } else return student;
+                });
 
-              var studentSubmittion = sfDoc.data().studentSubmittion;
-              var updatedSubmittion = studentSubmittion.map((student) => {
-                if (student.studentId === assignmentInfo.studentId) {
-                  // student.remark.length &&
-                  //   student.remark.push({
-                  //     feedback: feedback,
-                  //     teacher: state.user.displayName,
-                  //   });
-                  return {
-                    ...student,
-                    // remark: student.remark
-                    //   ? student.remark
-                    //   : [
-                    //       {
-                    //         feedback: feedback,
-                    //         teacher: state.user.displayName,
-                    //       },
-                    //     ],
-                    marks: grade,
-                  };
-                } else return student;
+                transaction.update(sfDocRef, {
+                  studentSubmittion: updatedSubmittion,
+                });
               });
+            })
+            .then(function () {
+              console.log("Transaction successfully committed!");
 
-              transaction.update(sfDocRef, {
-                studentSubmittion: updatedSubmittion,
-              });
+              toast.success("Successfully Remarked");
+              // setGrade("");
+              setFeedback("");
+            })
+            .catch(function (error) {
+              console.log("Transaction failed: ", error);
+              toast.error("Failed, Please Try Again");
             });
-          })
-          .then(function () {
-            console.log("Transaction successfully committed!");
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Failed, Please Try Again");
+        });
+    } else {
+      db.collection("SubmittedAssignment")
+        .doc(student.submittionId)
+        .update({
+          marks: grade,
+        })
+        .then(() => {
+          var sfDocRef = db
+            .collection("user")
+            .doc(assignmentInfo.teacherId)
+            .collection("classes")
+            .doc(assignmentInfo.classCode)
+            .collection("assignment")
+            .doc(assignmentInfo.assignmentId);
 
-            toast.success("Successfully Remarked");
-            setGrade("");
-            setFeedback("");
-          })
-          .catch(function (error) {
-            console.log("Transaction failed: ", error);
-            toast.error("Failed, Please Try Again");
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Failed, Please Try Again");
-      });
+          return db
+            .runTransaction(function (transaction) {
+              // This code may get re-run multiple times if there are conflicts.
+              return transaction.get(sfDocRef).then(function (sfDoc) {
+                if (!sfDoc.exists) {
+                  throw new Error("Document does not exist!");
+                }
+
+                var studentSubmittion = sfDoc.data().studentSubmittion;
+                var updatedSubmittion = studentSubmittion.map((student) => {
+                  if (student.studentId === assignmentInfo.studentId) {
+                    // student.remark.length &&
+                    //   student.remark.push({
+                    //     feedback: feedback,
+                    //     teacher: state.user.displayName,
+                    //   });
+                    return {
+                      ...student,
+                      // remark: student.remark
+                      //   ? student.remark
+                      //   : [
+                      //       {
+                      //         feedback: feedback,
+                      //         teacher: state.user.displayName,
+                      //       },
+                      //     ],
+                      marks: grade,
+                    };
+                  } else return student;
+                });
+
+                transaction.update(sfDocRef, {
+                  studentSubmittion: updatedSubmittion,
+                });
+              });
+            })
+            .then(function () {
+              console.log("Transaction successfully committed!");
+
+              toast.success("Successfully Remarked");
+              // setGrade("");
+              setFeedback("");
+            })
+            .catch(function (error) {
+              console.log("Transaction failed: ", error);
+              toast.error("Failed, Please Try Again");
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Failed, Please Try Again");
+        });
+    }
   };
 
   return (
@@ -139,7 +206,7 @@ const EvaluateStudent = ({ student }) => {
               {assignmentInfo.submittedPdfs &&
                 assignmentInfo.submittedPdfs.length > 0 && (
                   <li className="collection-header">
-                    <h5 className="green-text">Attachments</h5>
+                    <h5 className="green-text">Work Attachments</h5>
                   </li>
                 )}
               {assignmentInfo.submittedPdfs &&

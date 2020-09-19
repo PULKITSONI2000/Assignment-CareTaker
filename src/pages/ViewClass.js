@@ -45,17 +45,14 @@ const ViewClass = ({ match }) => {
 
   return (
     <div className="container">
-      {/* {console.log("yo", classInfo)} */}
-
       <div>
         <div className="class-box">
-          <h2 className="capitalize">{classInfo.title}</h2>
+          <h2 className="capitalize primary">{classInfo.title}</h2>
           {/* <p className="t-20">Teacher : {classInfo.teacher}</p>
           {classInfo.subject && <p>Subject : {classInfo.subject}</p>} */}
           {/* {classInfo.section && <p>Section : {classInfo.section}</p>} */}
-          <p>
-            Class Code :{" "}
-            <span className="grey-text text-darken-2">{classInfo.code}</span>
+          <p className="primary">
+            Class Code : <span className="secondary">{classInfo.code}</span>
           </p>
         </div>
       </div>

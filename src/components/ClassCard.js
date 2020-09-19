@@ -7,8 +7,10 @@ const ClassCard = ({ classInfo }) => {
       <div className="card">
         <div className="card-image waves-effect waves-block waves-light">
           {/* <img class="activator" src="images/office.jpg"/> */}
-          <div className="card-design">
-            <span className="card-title capitalize">{classInfo.title}</span>
+          <div className={`card-design bg-${Math.floor(Math.random() * 10)}`}>
+            <span className="card-title capitalize bold">
+              {classInfo.title}
+            </span>
           </div>
         </div>
         <div className="card-content">

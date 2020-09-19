@@ -13,15 +13,18 @@ import {
   Row,
   TimePicker,
 } from "react-materialize";
+import { toast } from "react-toastify";
 
 const AddAssignment = ({ state, classCode }) => {
   const [assignmentName, setassignmentName] = useState("");
   const [assignmentDueDate, setassignmentDueDate] = useState(false);
   const [assignmentDescription, setAssignmentDescription] = useState("");
-  // const [error, setError] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [files, setFiles] = useState([]);
+  const [success, setSuccess] = useState(false);
+
+  var tempfiles;
 
   const fileHandler = async (e) => {
     try {
@@ -31,6 +34,13 @@ const AddAssignment = ({ state, classCode }) => {
       var metadata = {
         contentType: file.type, /// gives the file pdf
       };
+
+      if (!file && !file.type) {
+        // eslint-disable-next-line
+        throw "File error";
+      }
+
+      setProgress(0);
 
       const storageRef = await firebase.storage().ref();
 
@@ -60,7 +70,7 @@ const AddAssignment = ({ state, classCode }) => {
           }
           if (progress === 100) {
             setIsUploading(false);
-            // toast("Successfully Uploaded", { type: "success" });
+            toast.success("Successfully Uploaded");
           }
         },
         (error) => {
@@ -71,7 +81,7 @@ const AddAssignment = ({ state, classCode }) => {
           uploadTask.snapshot.ref
             .getDownloadURL()
             .then((downloadURL) => {
-              var tempfiles = files;
+              tempfiles = files;
               tempfiles.push({
                 pdfName: file.name,
                 pdfFile: downloadURL,
@@ -85,8 +95,11 @@ const AddAssignment = ({ state, classCode }) => {
             .catch((err) => console.log(err));
         }
       );
+
+      setFiles(tempfiles);
     } catch (error) {
       console.log(error);
+      toast.error(error);
     }
   };
 
@@ -113,18 +126,19 @@ const AddAssignment = ({ state, classCode }) => {
         assignmentId: code,
         teacherId: state.user.uid,
       })
-      .then((result) => {
-        console.log("Success", result);
-        setassignmentName("");
+      .then(() => {
+        setSuccess(`Successfully Uploaded Assignment : ${assignmentName}`);
+        toast.success("Successfully Uploaded Assignment");
         setAssignmentDescription("");
         setassignmentDueDate(false);
         setFiles([]);
+        setassignmentName("");
         setIsUploading(false);
         setProgress(0);
-        // setSuccess(true);
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err);
       });
   };
 
@@ -132,6 +146,8 @@ const AddAssignment = ({ state, classCode }) => {
     <div className="container ">
       {/* {console.log("files", files)} */}
       <form className="my-20 p-box">
+        <h5 className="center-align green-text">{success}</h5>
+
         {/* /// Name */}
         <div className="input-field">
           <input
@@ -157,32 +173,21 @@ const AddAssignment = ({ state, classCode }) => {
                 setAssignmentDescription(event.target.value);
               }}
               className="materialize-textarea"
-            ></textarea>
+            />
             <label htmlFor="textarea1">Assignment Description</label>
           </div>
         </div>
 
-        {isUploading && (
+        {progress !== 0 && progress !== 100 && (
           <ProgressBar className="container green-text" progress={progress} />
         )}
-
-        {/* <Row>
-          {files.map((pdf, index) => (
-            <Col key={index}>
-              <a href={pdf.pdfFile} target="_blank" rel="noopener noreferrer">
-                <FaFilePdf size={70} color="red" /> <br />
-                {pdf.pdfName}
-              </a>
-            </Col>
-          ))}
-        </Row> */}
 
         {/* /// attachments */}
         <div className="mt-10 mb-30">
           <ul className="collection with-header">
             {files && files.length > 0 && (
               <li className="collection-header">
-                <h5 className="green-text">Attachments</h5>
+                <h5 className="green-text">Attachments ({files.length})</h5>
               </li>
             )}
             {files &&
@@ -203,7 +208,7 @@ const AddAssignment = ({ state, classCode }) => {
           </ul>
         </div>
 
-        {/* Files */}
+        {/* /// Files */}
         <div className="file-field input-field">
           <div className="btn">
             <span>File</span>

@@ -27,11 +27,10 @@ const CreateAnnouncement = ({ state, classCode }) => {
         teacher: state.user.displayName,
         announcementId: code,
       })
-      .then((result) => {
-        console.log("Success", result);
+      .then(() => {
+        toast.success("Successfully created");
         setAnnouncement("");
         setTitle("");
-        toast.success("Successfully created");
       })
       .catch((err) => {
         console.log(err);

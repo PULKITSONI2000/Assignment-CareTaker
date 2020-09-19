@@ -61,9 +61,9 @@ const AllAssignmants = ({ classCode }) => {
                 }
                 className="title"
               >
-                {assign.name}
+                <h5 className=" primary mt-0">{assign.name}</h5>
               </Link>
-              <p>
+              <p className="secondary">
                 Due Date :{"   "}
                 {/* {String(assign.data.dueDate.toDate().getDate())} */}
                 <span className="">{`${

@@ -19,71 +19,98 @@ const currentTab = (history, path) => {
   }
 };
 
+var err;
+
 const Header = ({ history }) => {
   const { state, dispatch } = useContext(UserContext);
   const [teacherEmail, setTeacherEmail] = useState("");
   const [joinClassCode, setjoinClassCode] = useState("");
+  const [joinError, setJoinError] = useState("");
+  const [createTeacherError, setCreateTeacherError] = useState("");
+  const [createTeacherResult, setCreateTeacherResult] = useState("");
+  const [joinResult, setJoinResult] = useState("");
 
   const handleJoinClass = () => {
-    firebase
-      .firestore()
-      .collectionGroup("classes")
-      .where("code", "==", joinClassCode)
-      .get()
-      .then((querySnapshot) => {
-        var classInfo = [];
-        querySnapshot.forEach((doc) => {
-          classInfo = doc.data();
+    if (!joinClassCode) {
+      setJoinError("Please Enter Class Code");
+    } else {
+      // console.log(state.classes);
+      var alreadyExist = false;
+      state.classes &&
+        state.classes.forEach((cls) => {
+          cls.code === joinClassCode && (alreadyExist = cls.title);
         });
-
-        firebase
-          .firestore()
-          .collection("user")
-          .doc(classInfo.teacherId)
-          .collection("classes")
-          .doc(classInfo.code)
-          .update({
-            students: firebase.firestore.FieldValue.arrayUnion({
-              studentId: state.user.uid,
-              studentName: state.user.displayName,
-              studentPhotoUrl: state.user.photoURL,
-            }),
-          })
-          .then(() => {
-            firebase
-              .firestore()
-              .collection("user")
-              .doc(state.user.uid)
-              .collection("JoinedClasses")
-              .add({
-                title: classInfo.title,
-                description: classInfo.description,
-                section: classInfo.section,
-                subject: classInfo.subject,
-                teacher: classInfo.teacher,
-                teacherId: classInfo.teacherId,
-                code: classInfo.code,
-                studentId: state.user.uid,
-              })
-              .then(() => {
-                console.log("Class", classInfo);
-                dispatch({
-                  type: ADD_CLASSES,
-                  payload: classInfo,
-                });
-                joinClassCode("");
-              })
-              .catch((err) => {
-                console.log(err);
+      alreadyExist
+        ? setJoinError(`Already Joined  ${alreadyExist}`)
+        : firebase
+            .firestore()
+            .collectionGroup("classes")
+            .where("code", "==", joinClassCode)
+            .get()
+            .then((querySnapshot) => {
+              var classInfo;
+              querySnapshot.forEach((doc) => {
+                classInfo = doc.data();
               });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+              if (classInfo === undefined) {
+                // eslint-disable-next-line
+                throw `No class Exist with code ${joinClassCode}`;
+              }
+              firebase
+                .firestore()
+                .collection("user")
+                .doc(classInfo.teacherId)
+                .collection("classes")
+                .doc(classInfo.code)
+                .update({
+                  students: firebase.firestore.FieldValue.arrayUnion({
+                    studentId: state.user.uid,
+                    studentName: state.user.displayName,
+                    studentPhotoUrl: state.user.photoURL,
+                  }),
+                })
+                .then(() => {
+                  firebase
+                    .firestore()
+                    .collection("user")
+                    .doc(state.user.uid)
+                    .collection("JoinedClasses")
+                    .add({
+                      title: classInfo.title,
+                      description: classInfo.description,
+                      section: classInfo.section,
+                      subject: classInfo.subject,
+                      teacher: classInfo.teacher,
+                      teacherId: classInfo.teacherId,
+                      code: classInfo.code,
+                      studentId: state.user.uid,
+                    })
+                    .then(() => {
+                      dispatch({
+                        type: ADD_CLASSES,
+                        payload: classInfo,
+                      });
+                      setjoinClassCode("");
+                      setJoinResult(
+                        `Successfully Join class ${classInfo.title}`
+                      );
+                    })
+                    .catch((err) => {
+                      setJoinError(err);
+                      // console.log(err);
+                    });
+                })
+                .catch((err) => {
+                  setJoinError(err);
+                  // console.log(err);
+                });
+            })
+            .catch((err) => {
+              setJoinError(err);
+              // console.log(err);
+            });
+    }
   };
 
   return (
@@ -190,14 +217,15 @@ const Header = ({ history }) => {
       {/* Join Class Modal */}
       <div id="joinClass" className="modal">
         <div className="modal-content">
-          <h4>Join Class</h4>
+          <h4 className="primary">Join Class</h4>
 
           <div className="row">
-            <h5>Please Add Class Code</h5>
+            <h5 className="secondary">Please Add Class Code</h5>
             <div className="input-field col s12">
               <input
                 id="joinClass"
                 value={joinClassCode}
+                required
                 onChange={(event) => {
                   setjoinClassCode(event.target.value);
                 }}
@@ -206,18 +234,23 @@ const Header = ({ history }) => {
               {/* <label htmlFor="joinClass">Class Code</label> */}
               <span
                 className="helper-text"
-                data-error="Please check the mail "
+                data-error="Please check the mail"
                 data-success="right"
               >
-                ( eg- IRFa-VaY2b )
+                {joinError ? (
+                  <h6 className="center-align red-text">{joinError}</h6>
+                ) : (
+                  "( eg - IRFa - VaY2b )"
+                )}
               </span>
+              <h6 className="center-align green-text">{joinResult}</h6>
             </div>
           </div>
         </div>
         <div className="modal-footer">
           <a
             href="#!"
-            className="modal-close waves-effect waves-green btn-flat"
+            className="modal-close waves-effect waves-green btn-flat red-text"
           >
             Close
           </a>
@@ -226,7 +259,7 @@ const Header = ({ history }) => {
             onClick={() => {
               handleJoinClass();
             }}
-            className="modal-close waves-effect waves-green btn-flat"
+            className="waves-effect waves-green btn-flat green-text"
           >
             Add
           </a>
@@ -293,6 +326,17 @@ const Header = ({ history }) => {
             <Link to={"/class/create"}>Create Class</Link>
           </li>
         )}
+        {state.user && state.user.emailVerified && (
+          <li>
+            <Link
+              to={"/"}
+              data-target="joinClass"
+              className="valign-wrapper modal-trigger"
+            >
+              Join Class
+            </Link>
+          </li>
+        )}
         {!state.user && (
           <li>
             <Link to={"/login"}>Login</Link>
@@ -320,14 +364,14 @@ const Header = ({ history }) => {
       {/* Add Teacher Modal */}
       <div id="addTeacher" className="modal">
         <div className="modal-content">
-          <h4>Add Teacher</h4>
-
+          <h4 className="primary">Add Teacher</h4>
           <div className="row">
-            <h5>Add Teacher Email Id</h5>
+            <h5 className="secondary">Add Teacher Email Id</h5>
             <div className="input-field col s12">
               <input
                 id="teacherEmail"
                 type="email"
+                required
                 value={teacherEmail}
                 onChange={(event) => {
                   setTeacherEmail(event.target.value);
@@ -335,36 +379,49 @@ const Header = ({ history }) => {
                 className="validate"
               />
               <label htmlFor="teacherEmail">Email</label>
-              <span
-                className="helper-text"
-                data-error="Please check the mail "
-                data-success="right"
-              >
-                ( eg- example@gmial.com )
+              <span className="helper-text">
+                {createTeacherError ? (
+                  <h6 className="center-align red-text">
+                    {createTeacherError}
+                  </h6>
+                ) : (
+                  "( eg- example@gmial.com )"
+                )}
               </span>
+              <h6 className="center-align green-text">{createTeacherResult}</h6>
             </div>
           </div>
         </div>
         <div className="modal-footer">
           <a
             href="#!"
-            className="modal-close waves-effect waves-green btn-flat"
+            className="modal-close waves-effect waves-green btn-flat red-text"
           >
             Close
           </a>
           <a
             href="#!"
             onClick={() => {
-              const addAdminRole = firebase
-                .functions()
-                .httpsCallable("addTeacherRole");
-              console.log("Email", teacherEmail);
+              setCreateTeacherError("");
+              if (!teacherEmail) {
+                setCreateTeacherError("Please enter the new teacher email");
+              } else {
+                const addAdminRole = firebase
+                  .functions()
+                  .httpsCallable("addTeacherRole");
 
-              addAdminRole({ email: teacherEmail }).then((result) => {
-                console.log(result);
-              });
+                addAdminRole({ email: teacherEmail }).then((result) => {
+                  if (result.data.errorInfo) {
+                    err = result.data.errorInfo.message;
+                    setCreateTeacherError(err);
+                  }
+                  setTeacherEmail("");
+                  setCreateTeacherResult(result.data.message);
+                  console.log(result);
+                });
+              }
             }}
-            className="modal-close waves-effect waves-green btn-flat"
+            className=" waves-effect waves-green btn-flat green-text"
           >
             Add
           </a>

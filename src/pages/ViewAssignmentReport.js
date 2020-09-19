@@ -132,7 +132,9 @@ const ViewAssignmentReport = ({ match }) => {
                         alt="student"
                         className="circle"
                       />
-                      <span className="title">{student.studentName}</span>
+                      <h5 className="title secondary mt-0">
+                        {student.studentName}
+                      </h5>
                       {/* <p>First Line</p> */}
                     </li>
                   ))
@@ -164,10 +166,12 @@ const ViewAssignmentReport = ({ match }) => {
                         alt="student"
                         className="circle"
                       />
-                      <span className="title">
-                        {student.studentName}{" "}
-                        <span className="right">{student.marks}</span>
-                      </span>
+                      <h5 className="title secondary mt-0">
+                        {student.studentName}
+                        <span className="right orange-text">
+                          {student.marks}
+                        </span>
+                      </h5>
                       {/* <p>First Line</p> */}
                     </li>
                   ))
@@ -192,7 +196,9 @@ const ViewAssignmentReport = ({ match }) => {
                           alt="student"
                           className="circle"
                         />
-                        <span className="title">{student.studentName}</span>
+                        <h5 className="title secondary mt-0">
+                          {student.studentName}
+                        </h5>
                         {/* <p>First Line</p> */}
                       </li>
                     ))
@@ -214,7 +220,7 @@ const ViewAssignmentReport = ({ match }) => {
             </blockquote>
 
             {assignmentInfo.dueDate && (
-              <h6 className="flow-text mt-50 ">
+              <h6 className=" mt-50 orange-text">
                 Due Data :
                 <span className="ml-10 teal-text">{`${
                   (new Date(assignmentInfo.dueDate.toDate()).getHours() % 12 ||
@@ -248,29 +254,38 @@ const ViewAssignmentReport = ({ match }) => {
 
             {/* /// attachments */}
             <div className="mt-10 mb-30">
-              <ul className="collection with-header">
-                {assignmentInfo.assignmentFiles &&
-                  assignmentInfo.assignmentFiles.length > 0 && (
-                    <li className="collection-header">
-                      <h5 className="green-text">Attachments</h5>
-                    </li>
-                  )}
-                {assignmentInfo.assignmentFiles &&
-                  assignmentInfo.assignmentFiles.map((pdf, index) => (
-                    <li key={index} className="collection-item">
-                      <div>
-                        <a
-                          href={pdf.pdfFile}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <FaFilePdf size={30} className="left" color="red" />
-                          <span className="valign-wrapper">{pdf.pdfName}</span>
-                        </a>
-                      </div>
-                    </li>
-                  ))}
-              </ul>
+              {assignmentInfo.assignmentFiles &&
+                assignmentInfo.assignmentFiles.length > 0 && (
+                  <ul className="collection with-header">
+                    {assignmentInfo.assignmentFiles &&
+                      assignmentInfo.assignmentFiles.length > 0 && (
+                        <li className="collection-header">
+                          <h5 className="green-text">Attachments</h5>
+                        </li>
+                      )}
+                    {assignmentInfo.assignmentFiles &&
+                      assignmentInfo.assignmentFiles.map((pdf, index) => (
+                        <li key={index} className="collection-item">
+                          <div>
+                            <a
+                              href={pdf.pdfFile}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <FaFilePdf
+                                size={30}
+                                className="left"
+                                color="red"
+                              />
+                              <span className="valign-wrapper">
+                                {pdf.pdfName}
+                              </span>
+                            </a>
+                          </div>
+                        </li>
+                      ))}
+                  </ul>
+                )}
             </div>
           </div>
         </Col>

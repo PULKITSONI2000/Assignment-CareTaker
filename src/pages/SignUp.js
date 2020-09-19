@@ -3,7 +3,7 @@ import { UserContext } from "../context/Context";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { toast } from "react-toastify";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Col, Row } from "react-materialize";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
@@ -164,6 +164,9 @@ const SignUp = () => {
               </form>
             </Col>
           </Row>
+          <h6 className="center-align mt-20">
+            Already have an Account? <Link to="/login">Login</Link>
+          </h6>
         </div>
       )}
     </div>

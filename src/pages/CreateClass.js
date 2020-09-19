@@ -40,7 +40,7 @@ const CreateClass = () => {
         teacherId: state.user.uid,
         code: code,
       })
-      .then((result) => {
+      .then(() => {
         // console.log(result);
         dispatch({
           type: ADD_CLASSES,
@@ -53,7 +53,7 @@ const CreateClass = () => {
             code: code,
           },
         });
-        setSuccess(true);
+        setSuccess(`Successfully Created Class ${classInfo.classTitle}`);
       })
       .catch((err) => {
         console.log(err);
@@ -66,62 +66,65 @@ const CreateClass = () => {
 
   //   TODO: add it to database
   return (
-    <div>
-      <form className="row">
-        <div className="col s6 offset-s3">
-          <div className="input-field">
-            <input
-              id="classTitle"
-              type="text"
-              required
-              value={classInfo.classTitle}
-              onChange={handleChange("classTitle")}
-              className="validate"
-            />
-            <label htmlFor="classTitle">Class Name*</label>
-          </div>
-          <div className="input-field">
-            <textarea
-              id="classDescription"
-              value={classInfo.classDescription}
-              onChange={handleChange("classDescription")}
-              className="materialize-textarea"
-            ></textarea>
-            <label htmlFor="classDescription">Class Description</label>
-          </div>
-          <div className="input-field">
-            <input
-              id="classSubject"
-              type="text"
-              value={classInfo.classSubject}
-              onChange={handleChange("classSubject")}
-              className="validate"
-            />
-            <label htmlFor="classSubject">Class Subject</label>
-          </div>
-          <div className="input-field">
-            <input
-              id="classSection"
-              type="text"
-              value={classInfo.classSection}
-              onChange={handleChange("classSection")}
-              className="validate"
-            />
-            <label htmlFor="classSection">Class Section</label>
-          </div>
-          <div className="center-align">
-            {classInfo.classTitle === "" ? (
-              <button className="waves-effect disabled waves-light btn-large">
-                Class Name is required
-              </button>
-            ) : (
-              <button
-                className="waves-effect waves-light btn-large"
-                onClick={onSubmit}
-              >
-                Create Class
-              </button>
-            )}
+    <div className=" container">
+      <form className="row my-20">
+        <div className="col s6 offset-s3 fg-box">
+          <div className="p-box">
+            <h6 className="center-align green-text">{success}</h6>
+            <div className="input-field">
+              <input
+                id="classTitle"
+                type="text"
+                required
+                value={classInfo.classTitle}
+                onChange={handleChange("classTitle")}
+                className="validate"
+              />
+              <label htmlFor="classTitle">Class Name*</label>
+            </div>
+            <div className="input-field">
+              <textarea
+                id="classDescription"
+                value={classInfo.classDescription}
+                onChange={handleChange("classDescription")}
+                className="materialize-textarea"
+              ></textarea>
+              <label htmlFor="classDescription">Class Description</label>
+            </div>
+            <div className="input-field">
+              <input
+                id="classSubject"
+                type="text"
+                value={classInfo.classSubject}
+                onChange={handleChange("classSubject")}
+                className="validate"
+              />
+              <label htmlFor="classSubject">Class Subject</label>
+            </div>
+            <div className="input-field">
+              <input
+                id="classSection"
+                type="text"
+                value={classInfo.classSection}
+                onChange={handleChange("classSection")}
+                className="validate"
+              />
+              <label htmlFor="classSection">Class Section</label>
+            </div>
+            <div className="center-align">
+              {classInfo.classTitle === "" ? (
+                <button className="waves-effect disabled waves-light btn-large">
+                  Class Name is required
+                </button>
+              ) : (
+                <button
+                  className="waves-effect waves-light btn-large"
+                  onClick={onSubmit}
+                >
+                  Create Class
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </form>
