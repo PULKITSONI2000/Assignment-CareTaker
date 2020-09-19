@@ -7,6 +7,7 @@ import AddAssignment from "../components/AddAssignment";
 import AllAssignmants from "../components/AllAssignmants";
 import CreateAnnouncement from "../components/CreateAnnouncement";
 import AllAnnouncements from "../components/AllAnnouncements";
+import Attendance from "../components/Attendance";
 
 import M from "materialize-css/dist/js/materialize.min.js";
 
@@ -65,6 +66,10 @@ const ViewClass = ({ match }) => {
           </li>
 
           <li className="tab">
+            <a href="#Attendance">Attendance</a>
+          </li>
+
+          <li className="tab">
             <a href="#Announcement">Announcement</a>
           </li>
 
@@ -92,6 +97,10 @@ const ViewClass = ({ match }) => {
             )
             // console.log("Code ", classInfo.code)
           }
+        </div>
+
+        <div id="Attendance">
+          {state.user && classInfo.code && <Attendance classInfo={classInfo} />}
         </div>
 
         <div id="Announcement">
