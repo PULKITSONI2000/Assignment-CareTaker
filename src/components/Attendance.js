@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { toast } from "react-toastify";
+import AttendenceRecord from "./AttendenceRecord";
 
 const Attendance = ({ classInfo }) => {
   const { state } = useContext(UserContext);
@@ -80,7 +81,6 @@ const Attendance = ({ classInfo }) => {
         });
       })
       .then(function () {
-        console.log("Transaction successfully committed!");
         toast.success("Marked Present");
       })
       .catch(function (error) {
@@ -131,8 +131,8 @@ const Attendance = ({ classInfo }) => {
     batch
       .commit()
       .then(() => {
-        setSuccess("Successfully Start Taking Attendence");
-        toast.success("Successfully Start Taking Attendence");
+        setSuccess("Successfully Ended Taking Attendence");
+        toast.success("Successfully Ended Taking Attendence");
       })
       .catch((err) => {
         console.log(err);
@@ -193,59 +193,79 @@ const Attendance = ({ classInfo }) => {
 
   return (
     <div>
-      <h3>{success}</h3>
+      <h5 className="center-align green-text">{success}</h5>
 
       {/* TODO: Remove */}
-      {console.log(classInfo)}
+      {/* {console.log(classInfo)} */}
       {/* {console.log(isPresent())} */}
-
-      {/* {classInfo.attendances &&
-        console.log(classInfo.attendances[classInfo.attendances.length - 1])} */}
-      {/* {console.log(classInfo.attendances)} */}
 
       {state.teacher ? (
         !classInfo.attendances ? (
           <div className="center-align">
             {/* /// Teacher Section */}
             <button
-              className="waves-effect waves-light btn-large"
+              className="waves-effect waves-light btn-large mt-20"
               onClick={stateAttendence}
             >
               Start Taking Take Attendance
             </button>
+            <div className="center-align mt-50">
+              {classInfo.attendances && classInfo.attendances.length > 0 && (
+                <AttendenceRecord
+                  classInfo={classInfo}
+                  attendenceInfo={attendenceInfo}
+                />
+              )}
+            </div>
           </div>
         ) : classInfo.attendances[classInfo.attendances.length - 1].endDate ? (
           <div className="center-align">
             {/* /// Teacher Section */}
             <button
-              className="waves-effect waves-light btn-large"
+              className="waves-effect waves-light btn-large mt-20"
               onClick={stateAttendence}
             >
               Start Taking Attendance
             </button>
+            <div className="center-align mt-50">
+              {classInfo.attendances && classInfo.attendances.length > 0 && (
+                <AttendenceRecord
+                  classInfo={classInfo}
+                  attendenceInfo={attendenceInfo}
+                />
+              )}
+            </div>
           </div>
         ) : (
           <div className="center-align">
             {/* /// Teacher Section */}
             <button
-              className="waves-effect waves-light btn-large red"
+              className="waves-effect waves-light btn-large red  mt-20"
               onClick={endAttendence}
             >
               End Taking Attendance
             </button>
+            <div className="center-align mt-50">
+              {classInfo.attendances && classInfo.attendances.length > 0 && (
+                <AttendenceRecord
+                  classInfo={classInfo}
+                  attendenceInfo={attendenceInfo}
+                />
+              )}
+            </div>
           </div>
         )
       ) : isPresent() ? (
-        <h5 className="center-align green-text">You are Present</h5>
+        <h5 className="center-align green-text mt-20">You are Present</h5>
       ) : classInfo.attendances ? (
         classInfo.attendances[classInfo.attendances.length - 1].endDate ? (
-          <h5 className="center-align orange-text">
+          <h5 className="center-align orange-text mt-20">
             No Attendance is taken rignt now
           </h5>
         ) : (
           <div className="center-align">
             <button
-              className="waves-effect waves-light btn-large"
+              className="waves-effect waves-light btn-large mt-20"
               onClick={markPresent}
             >
               Mark Present
@@ -253,11 +273,11 @@ const Attendance = ({ classInfo }) => {
           </div>
         )
       ) : (
-        <h5 className="center-align orange-text">
+        <h5 className="center-align orange-text mt-20">
           No Attendance is taken rignt now
         </h5>
       )}
-      {console.log("attendenceInfo", attendenceInfo)}
+      {/* {console.log("attendenceInfo", attendenceInfo)} */}
     </div>
   );
 };

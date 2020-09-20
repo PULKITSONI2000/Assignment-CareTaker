@@ -29,17 +29,6 @@ const ViewAssignmentReport = ({ match }) => {
           console.log(err);
         }
       );
-    // if use get() uss this
-    // .then((querySnapshot) => {
-    //   querySnapshot.forEach((doc) => {
-    //     setAssignmentInfo(doc.data());
-    //     // console.log("doc", doc.data());
-    //   });
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
-
     var elems = document.querySelectorAll(".tabs");
     M.Tabs.init(elems, {});
 
