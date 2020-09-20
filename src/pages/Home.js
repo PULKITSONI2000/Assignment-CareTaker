@@ -36,7 +36,7 @@ const Home = () => {
         {state.classes.length <= 0 ? (
           <div>
             <h2 className="center-align w-100 grey-text ">
-              {"Welcome to ///school Name///"}
+              {"Welcome to Sky World"}
             </h2>
             <br />
             <h4 className=" center-align w-100 grey-text ">

@@ -3,6 +3,8 @@ import { withRouter, Link } from "react-router-dom";
 import { BiBookAdd, BiMenu, BiLogIn } from "react-icons/bi";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 
+import Logo from "../images/Logo.png";
+
 import firebase from "firebase/app";
 import "firebase/firestore";
 
@@ -126,7 +128,7 @@ const Header = ({ history }) => {
         })}
         <div className="nav-wrapper">
           <Link to={"/"} className="brand-logo center">
-            Logo
+            <img src={Logo} alt="" height="50px" style={{ marginTop: 5 }} />
           </Link>
           {/* /// Menu */}
           <span data-target="slide-out" className="sidenav-trigger">
