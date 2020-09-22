@@ -209,7 +209,7 @@ const ViewAssignmentReport = ({ match }) => {
             </blockquote>
 
             {assignmentInfo.dueDate && (
-              <h6 className=" mt-50 orange-text">
+              <h6 className="mt-50 orange-text">
                 Due Data :
                 <span className="ml-10 teal-text">{`${
                   (new Date(assignmentInfo.dueDate.toDate()).getHours() % 12 ||

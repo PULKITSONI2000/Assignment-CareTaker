@@ -68,13 +68,23 @@ const ViewAssignment = ({ match }) => {
     // eslint-disable-next-line
   }, [assignmentInfo.studentSubmittion]);
 
+  var tempfiles = [];
+
   const fileHandler = async (e) => {
     try {
+      console.log(e.target.files);
       const file = e.target.files[0];
 
       var metadata = {
         contentType: file.type, /// gives the file pdf
       };
+
+      if (!file && !file.type) {
+        // eslint-disable-next-line
+        throw "File error";
+      }
+
+      setProgress(0);
 
       const storageRef = await firebase.storage().ref();
 
@@ -101,13 +111,14 @@ const ViewAssignment = ({ match }) => {
               break;
             case firebase.storage.TaskState.RUNNING:
               console.log("UPloading is in progress...");
+              setIsUploading(true);
               break;
             default:
               console.log("Something went wrong in uploading");
           }
           if (progress === 100) {
             setIsUploading(false);
-            // toast("Successfully Uploaded", { type: "success" });
+            toast.success("Successfully Uploaded");
           }
         },
         (error) => {
@@ -118,21 +129,25 @@ const ViewAssignment = ({ match }) => {
           uploadTask.snapshot.ref
             .getDownloadURL()
             .then((downloadURL) => {
-              var tempfiles = files;
+              tempfiles = files;
               tempfiles.push({
                 pdfName: file.name,
                 pdfFile: downloadURL,
               });
-              console.log("downloadURL", tempfiles);
+              // console.log("tempfiles", file.name);
               setFiles(tempfiles);
               setIsUploading(false);
-              toast.success(`${file.name} Uploaded`);
+              ///
+              setFiles(files);
             })
             .catch((err) => console.log(err));
         }
       );
+
+      setFiles(tempfiles);
     } catch (error) {
       console.log(error);
+      toast.error(error);
     }
   };
 
@@ -201,16 +216,17 @@ const ViewAssignment = ({ match }) => {
   return (
     <div className="container">
       <Row>
-        {console.log(assignmentInfo)}
         <Col s={12} m={8}>
-          <h2 className="underline">{assignmentInfo.name}</h2>
+          <h2 className="underline primary bold capitalize">
+            {assignmentInfo.name}
+          </h2>
 
           <blockquote className="flow-text mt-50 ">
             {assignmentInfo.description}
           </blockquote>
 
           {assignmentInfo.dueDate && (
-            <h6 className="flow-text mt-50 ">
+            <h6 className="mt-50 orange-text ">
               Due Data :
               <span className="ml-10 teal-text">{`${
                 (new Date(assignmentInfo.dueDate.toDate()).getHours() % 12 ||
@@ -239,22 +255,6 @@ const ViewAssignment = ({ match }) => {
               ).getFullYear()}`}</span>
             </h6>
           )}
-
-          {/* <Row className="mt-50 ">
-            {assignmentInfo.assignmentFiles &&
-              assignmentInfo.assignmentFiles.map((pdf, index) => (
-                <Col key={index}>
-                  <a
-                    href={pdf.pdfFile}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FaFilePdf size={70} color="red" /> <br />
-                    {pdf.pdfName}
-                  </a>
-                </Col>
-              ))}
-          </Row> */}
 
           {/* /// attachments */}
           <div className="mt-50">
@@ -385,11 +385,11 @@ const ViewAssignment = ({ match }) => {
                       className="waves-effect waves-light btn-large "
                       onClick={onSubmit}
                     >
-                      Add Assignment
+                      Submit Assignment
                     </span>
                   ) : (
                     <span className="waves-effect disabled waves-light btn-large ">
-                      Add Assignment
+                      Submit Assignment
                     </span>
                   )}
                 </div>

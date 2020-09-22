@@ -122,11 +122,11 @@ const Login = () => {
                       type="submit"
                       className="waves-effect waves-light btn-large "
                     >
-                      SignUp
+                      Login
                     </button>
                   ) : (
                     <button className="waves-effect disabled waves-light btn-large ">
-                      SignUp
+                      Login
                     </button>
                   )}
                 </div>

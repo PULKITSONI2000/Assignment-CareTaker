@@ -30,6 +30,7 @@ import ViewAssignmentReport from "./pages/ViewAssignmentReport";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignUp from "./pages/SignUp";
+import ViewTestReport from "./pages/ViewTestReport";
 
 // init firebase
 firebase.initializeApp(firebaseConfig);
@@ -79,6 +80,12 @@ function App() {
               exact
               path="/assignment/report/:assignmentId"
               component={ViewAssignmentReport}
+            />
+
+            <PrivateTeacherRoute
+              exact
+              path="/test/report/:testId"
+              component={ViewTestReport}
             />
 
             <Route exact path="*" component={PageNotFound} />

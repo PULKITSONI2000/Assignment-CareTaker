@@ -26,8 +26,6 @@ const AttendenceRecord = ({ classInfo, attendenceInfo }) => {
 
   return (
     <div>
-      {/* {console.log(classInfo)} */}
-      {/* {console.log(attendances)} */}
       <Row>
         <Col push={"m4"} s={12} m={8}>
           <div className="show-on-medium-and-up">

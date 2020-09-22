@@ -140,7 +140,7 @@ const Attendance = ({ classInfo }) => {
       });
   };
 
-  const stateAttendence = () => {
+  const startAttendence = () => {
     const code = nanoid(14);
 
     var db = firebase.firestore();
@@ -195,17 +195,13 @@ const Attendance = ({ classInfo }) => {
     <div>
       <h5 className="center-align green-text">{success}</h5>
 
-      {/* TODO: Remove */}
-      {/* {console.log(classInfo)} */}
-      {/* {console.log(isPresent())} */}
-
       {state.teacher ? (
         !classInfo.attendances ? (
           <div className="center-align">
             {/* /// Teacher Section */}
             <button
               className="waves-effect waves-light btn-large mt-20"
-              onClick={stateAttendence}
+              onClick={startAttendence}
             >
               Start Taking Take Attendance
             </button>
@@ -223,7 +219,7 @@ const Attendance = ({ classInfo }) => {
             {/* /// Teacher Section */}
             <button
               className="waves-effect waves-light btn-large mt-20"
-              onClick={stateAttendence}
+              onClick={startAttendence}
             >
               Start Taking Attendance
             </button>

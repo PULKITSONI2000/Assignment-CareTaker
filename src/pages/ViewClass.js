@@ -10,6 +10,7 @@ import AllAnnouncements from "../components/AllAnnouncements";
 import Attendance from "../components/Attendance";
 
 import M from "materialize-css/dist/js/materialize.min.js";
+import Tests from "../components/Tests";
 
 const ViewClass = ({ match }) => {
   const [classInfo, setClassInfo] = useState({});
@@ -62,6 +63,10 @@ const ViewClass = ({ match }) => {
         {/* /// Links */}
         <ul className="tabs tabs-fixed-width tab-demo  center">
           <li className="tab">
+            <a href="#Announcement">Announcement</a>
+          </li>
+
+          <li className="tab">
             <a href="#Assignments">Assignments</a>
           </li>
 
@@ -70,7 +75,7 @@ const ViewClass = ({ match }) => {
           </li>
 
           <li className="tab">
-            <a href="#Announcement">Announcement</a>
+            <a href="#Test">Test</a>
           </li>
 
           {state.teacher && (
@@ -101,6 +106,10 @@ const ViewClass = ({ match }) => {
 
         <div id="Attendance">
           {state.user && classInfo.code && <Attendance classInfo={classInfo} />}
+        </div>
+
+        <div id="Test">
+          {state.user && classInfo.code && <Tests classInfo={classInfo} />}
         </div>
 
         <div id="Announcement">
