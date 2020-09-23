@@ -20,9 +20,11 @@ const Timer = ({ endTime }) => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
+    // Clear timeout if the component is unmounted
+    return () => clearTimeout(timer);
   });
 
   const timerComponents = [];
