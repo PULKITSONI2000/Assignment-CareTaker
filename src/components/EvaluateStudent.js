@@ -201,31 +201,35 @@ const EvaluateStudent = ({ student }) => {
           </div>
 
           {/* /// attachments */}
-          <div className="mt-10">
-            <ul className="collection with-header">
-              {assignmentInfo.submittedPdfs &&
-                assignmentInfo.submittedPdfs.length > 0 && (
-                  <li className="collection-header">
-                    <h5 className="green-text">Work Attachments</h5>
-                  </li>
-                )}
-              {assignmentInfo.submittedPdfs &&
-                assignmentInfo.submittedPdfs.map((pdf, index) => (
-                  <li key={index} className="collection-item">
-                    <div>
-                      <a
-                        href={pdf.pdfFile}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <FaFilePdf size={30} className="left" color="red" />
-                        <span className="valign-wrapper">{pdf.pdfName}</span>
-                      </a>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </div>
+          {assignmentInfo.submittedPdfs &&
+            assignmentInfo.submittedPdfs.length > 0 && (
+              <div className="mt-10">
+                <ul className="collection with-header">
+                  {assignmentInfo.submittedPdfs.length > 0 && (
+                    <li className="collection-header">
+                      <h5 className="green-text">Work Attachments</h5>
+                    </li>
+                  )}
+                  {assignmentInfo.submittedPdfs &&
+                    assignmentInfo.submittedPdfs.map((pdf, index) => (
+                      <li key={index} className="collection-item">
+                        <div>
+                          <a
+                            href={pdf.pdfFile}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FaFilePdf size={30} className="left" color="red" />
+                            <span className="valign-wrapper">
+                              {pdf.pdfName}
+                            </span>
+                          </a>
+                        </div>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            )}
 
           {/* /// Submition date */}
           {assignmentInfo.submittionDate && (

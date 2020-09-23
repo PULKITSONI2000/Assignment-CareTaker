@@ -20,7 +20,6 @@ const ViewTestReport = ({ match }) => {
       .doc(match.params.testId)
       .onSnapshot(
         (querySnapshot) => {
-          console.log(querySnapshot.data());
           setTestInfo(querySnapshot.data());
         },
         (err) => {
@@ -70,7 +69,7 @@ const ViewTestReport = ({ match }) => {
                 </a>
               </li>
               <li className="tab col s3">
-                <a href="#testPresents">
+                <a href="#testPresents" className="active">
                   {" "}
                   Presents ({" "}
                   {(testInfo.presentStudents &&
@@ -113,7 +112,7 @@ const ViewTestReport = ({ match }) => {
             </ul>
           </div>
           <div id="testPresents" className="col s12">
-            <ul className="collection ">
+            <ul className="collection pointer">
               {testInfo &&
               testInfo.presentStudents &&
               testInfo.presentStudents.length > 0 ? (
@@ -136,6 +135,7 @@ const ViewTestReport = ({ match }) => {
                     />
                     <h5 className="title secondary mt-0">
                       {student.studentName}
+                      <span className="right orange-text">{student.marks}</span>
                     </h5>
                   </li>
                 ))
@@ -275,10 +275,14 @@ const ViewTestReport = ({ match }) => {
           </div>
         </Col>
 
-        <Col s={12} l={5}>
+        <Col s={12} l={4}>
           <div className="scroll">
-            {studentToEvaluate && (
+            {studentToEvaluate ? (
               <EvaluateTestStudent student={studentToEvaluate} />
+            ) : (
+              <h5 className="grey-text center-align mt-50">
+                No Student Selected
+              </h5>
             )}
           </div>
         </Col>

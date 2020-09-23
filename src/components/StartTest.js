@@ -102,245 +102,264 @@ const StartTest = ({ classInfo }) => {
   };
 
   const onSubmit = (event) => {
-    event.preventDefault();
-    const code = nanoid(14);
+    try {
+      event.preventDefault();
+      const code = nanoid(14);
 
-    var db = firebase.firestore();
-    var batch = db.batch();
+      var db = firebase.firestore();
+      var batch = db.batch();
 
-    batch.set(db.collection("tests").doc(code), {
-      startDate: firebase.firestore.Timestamp.fromDate(new Date(testStartDate)),
-      endDate: firebase.firestore.Timestamp.fromDate(new Date(testEndDate)),
-      testId: code,
-
-      classCode: classInfo.code,
-      teacherId: state.user.uid,
-
-      presentStudents: [],
-      absentStudents: classInfo.students,
-
-      testName: testName,
-      testDescription: testDescription,
-      testFiles: files,
-    });
-
-    batch.update(
-      db
-        .collection("user")
-        .doc(classInfo.teacherId)
-        .collection("classes")
-        .doc(classInfo.code),
-      {
-        tests: firebase.firestore.FieldValue.arrayUnion({
-          testId: code,
-          testName: testName,
-          startDate: testStartDate.toString(),
-          endDate: testEndDate.toString(),
-        }),
+      if (new Date(testEndDate) <= new Date()) {
+        // eslint-disable-next-line
+        throw "End Date is Already expired";
       }
-    );
+      if (new Date(testStartDate) <= new Date()) {
+        // eslint-disable-next-line
+        throw "You cannot create test in past";
+      }
 
-    batch
-      .commit()
-      .then(() => {
-        toast.success("Successfully Set Test");
+      batch.set(db.collection("tests").doc(code), {
+        startDate: firebase.firestore.Timestamp.fromDate(
+          new Date(testStartDate)
+        ),
+        endDate: firebase.firestore.Timestamp.fromDate(new Date(testEndDate)),
+        testId: code,
 
-        setTestName("");
-        setTestDescription("");
-        setTestEndDate("");
-        setTestStartDate("");
-        setIsUploading(false);
-        setProgress(0);
-        setFiles([]);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err);
+        classCode: classInfo.code,
+        teacherId: state.user.uid,
+
+        presentStudents: [],
+        absentStudents: classInfo.students || [],
+
+        testName: testName,
+        testDescription: testDescription,
+        testFiles: files,
       });
+
+      batch.update(
+        db
+          .collection("user")
+          .doc(classInfo.teacherId)
+          .collection("classes")
+          .doc(classInfo.code),
+        {
+          tests: firebase.firestore.FieldValue.arrayUnion({
+            testId: code,
+            testName: testName,
+            startDate: testStartDate.toString(),
+            endDate: testEndDate.toString(),
+          }),
+        }
+      );
+
+      batch
+        .commit()
+        .then(() => {
+          toast.success("Successfully Set Test");
+
+          setTestName("");
+          setTestDescription("");
+          setTestEndDate("");
+          setTestStartDate("");
+          setIsUploading(false);
+          setProgress(0);
+          setFiles([]);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(err);
+        });
+    } catch (err) {
+      console.log(err);
+      toast.error(err);
+    }
   };
 
   return (
     <div className="container fg-box">
-      <form className="my-20 p-box">
-        {/* /// Name */}
-        <div className="input-field">
-          <input
-            id="testName"
-            type="text"
-            required
-            className="validate"
-            value={testName}
-            onChange={(event) => {
-              setTestName(event.target.value);
-            }}
-          />
-          <label htmlFor="testName">Test Name</label>
-        </div>
-
-        {/*/// Description */}
-        <div>
+      <div className="my-20 p-box">
+        <h4 className="center primary bold mt-10">Create Test</h4>
+        <form>
+          {/* /// Name */}
           <div className="input-field">
-            <textarea
-              id="testtextarea1"
-              value={testDescription}
-              onChange={(event) => {
-                setTestDescription(event.target.value);
-              }}
-              className="materialize-textarea"
-            />
-            <label htmlFor="testtextarea1">Test Description</label>
-          </div>
-        </div>
-
-        {progress !== 0 && progress !== 100 && (
-          <ProgressBar className="container green-text" progress={progress} />
-        )}
-
-        {/* /// attachments */}
-        {files && files.length > 0 && (
-          <div className="mt-10 mb-30">
-            <ul className="collection with-header">
-              {files && files.length > 0 && (
-                <li className="collection-header">
-                  <h5 className="green-text">Attachments ({files.length})</h5>
-                </li>
-              )}
-              {files &&
-                files.map((pdf, index) => (
-                  <li key={index} className="collection-item">
-                    <div>
-                      <a
-                        href={pdf.pdfFile}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <FaFilePdf size={30} className="left" color="red" />
-                        <span className="valign-wrapper">{pdf.pdfName}</span>
-                      </a>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        )}
-
-        {/* /// Files */}
-        <div className="file-field input-field">
-          <div className="btn">
-            <span>File</span>
             <input
-              type="file"
-              accept="application/pdf"
-              onChange={(event) => {
-                fileHandler(event);
-              }}
-            />
-          </div>
-          <div className="file-path-wrapper">
-            <input
-              className="file-path validate"
-              accept="application/pdf"
+              id="testName"
               type="text"
+              required
+              className="validate"
+              value={testName}
+              onChange={(event) => {
+                setTestName(event.target.value);
+              }}
             />
+            <label htmlFor="testName">Test Name</label>
           </div>
-        </div>
 
-        {/* /// startDate */}
-        <div className="mt-20">
-          <Row>
-            <Col>
-              <h6 className="secondary">Start Date :</h6>
-              <DatePicker
-                id="testStartDate"
-                options={{
-                  autoClose: true,
-                  defaultDate: new Date(),
-                  firstDay: 0,
-                  format: "dd mmm yyyy",
-                  minDate: new Date(),
+          {/*/// Description */}
+          <div>
+            <div className="input-field">
+              <textarea
+                id="testtextarea1"
+                value={testDescription}
+                onChange={(event) => {
+                  setTestDescription(event.target.value);
                 }}
-                onChange={(date) => {
-                  setTestStartDate(date);
-                }}
+                className="materialize-textarea"
               />
-            </Col>
-            <Col>
-              {testStartDate && (
-                <>
-                  <h6 className="secondary">Time :</h6>
+              <label htmlFor="testtextarea1">Test Description</label>
+            </div>
+          </div>
 
-                  <TimePicker
-                    id="testStartTime"
-                    onChange={(hour, minutes) => {
-                      // console.log(hour, minutes);
-                      testStartDate && testStartDate.setHours(hour);
-                      testStartDate && testStartDate.setMinutes(minutes);
-                    }}
-                    options={{
-                      twelveHour: false,
-                    }}
-                  />
-                </>
-              )}
-            </Col>
-          </Row>
-        </div>
-        {/* /// endDate */}
-        <div className="mt-20">
-          <Row>
-            <Col>
-              <h6 className="secondary">End Date :</h6>
-              <DatePicker
-                id="testEndDate"
-                options={{
-                  autoClose: true,
-                  defaultDate: new Date(),
-                  firstDay: 0,
-                  format: "dd mmm yyyy",
-                  minDate: new Date(),
-                }}
-                onChange={(date) => {
-                  setTestEndDate(date);
-                }}
-              />
-            </Col>
-            <Col>
-              {testEndDate && (
-                <>
-                  <h6 className="secondary">Time :</h6>
-
-                  <TimePicker
-                    id="testEndTime"
-                    onChange={(hour, minutes) => {
-                      // console.log(hour, minutes);
-                      testEndDate && testEndDate.setHours(hour);
-                      testEndDate && testEndDate.setMinutes(minutes);
-                    }}
-                    options={{
-                      twelveHour: false,
-                    }}
-                  />
-                </>
-              )}
-            </Col>
-          </Row>
-        </div>
-
-        <div className="center-align">
-          {!isUploading && testName && testStartDate && testEndDate ? (
-            <span
-              className="waves-effect waves-light btn-large "
-              onClick={onSubmit}
-            >
-              Create test
-            </span>
-          ) : (
-            <span className="waves-effect disabled waves-light btn-large ">
-              Create test
-            </span>
+          {progress !== 0 && progress !== 100 && (
+            <ProgressBar className="container green-text" progress={progress} />
           )}
-        </div>
-      </form>
+
+          {/* /// attachments */}
+          {files && files.length > 0 && (
+            <div className="mt-10 mb-30">
+              <ul className="collection with-header">
+                {files && files.length > 0 && (
+                  <li className="collection-header">
+                    <h5 className="green-text">Attachments ({files.length})</h5>
+                  </li>
+                )}
+                {files &&
+                  files.map((pdf, index) => (
+                    <li key={index} className="collection-item">
+                      <div>
+                        <a
+                          href={pdf.pdfFile}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FaFilePdf size={30} className="left" color="red" />
+                          <span className="valign-wrapper">{pdf.pdfName}</span>
+                        </a>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
+
+          {/* /// Files */}
+          <div className="file-field input-field">
+            <div className="btn">
+              <span>File</span>
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={(event) => {
+                  fileHandler(event);
+                }}
+              />
+            </div>
+            <div className="file-path-wrapper">
+              <input
+                className="file-path validate"
+                accept="application/pdf"
+                type="text"
+              />
+            </div>
+          </div>
+
+          {/* /// startDate */}
+          <div className="mt-20">
+            <Row>
+              <Col>
+                <h6 className="secondary">Start Date :</h6>
+                <DatePicker
+                  id="testStartDate"
+                  options={{
+                    autoClose: true,
+                    defaultDate: new Date(),
+                    firstDay: 0,
+                    format: "dd mmm yyyy",
+                    minDate: new Date(),
+                  }}
+                  onChange={(date) => {
+                    setTestStartDate(date);
+                  }}
+                />
+              </Col>
+              <Col>
+                {testStartDate && (
+                  <>
+                    <h6 className="secondary">Time :</h6>
+
+                    <TimePicker
+                      id="testStartTime"
+                      onChange={(hour, minutes) => {
+                        // console.log(hour, minutes);
+                        testStartDate && testStartDate.setHours(hour);
+                        testStartDate && testStartDate.setMinutes(minutes);
+                      }}
+                      options={{
+                        twelveHour: false,
+                      }}
+                    />
+                  </>
+                )}
+              </Col>
+            </Row>
+          </div>
+          {/* /// endDate */}
+          <div className="mt-20">
+            <Row>
+              <Col>
+                <h6 className="secondary">End Date :</h6>
+                <DatePicker
+                  id="testEndDate"
+                  options={{
+                    autoClose: true,
+                    defaultDate: new Date(),
+                    firstDay: 0,
+                    format: "dd mmm yyyy",
+                    minDate: new Date(),
+                  }}
+                  onChange={(date) => {
+                    setTestEndDate(date);
+                  }}
+                />
+              </Col>
+              <Col>
+                {testEndDate && (
+                  <>
+                    <h6 className="secondary">Time :</h6>
+
+                    <TimePicker
+                      id="testEndTime"
+                      onChange={(hour, minutes) => {
+                        // console.log(hour, minutes);
+                        testEndDate && testEndDate.setHours(hour);
+                        testEndDate && testEndDate.setMinutes(minutes);
+                      }}
+                      options={{
+                        twelveHour: false,
+                      }}
+                    />
+                  </>
+                )}
+              </Col>
+            </Row>
+          </div>
+
+          <div className="center-align">
+            {!isUploading && testName && testStartDate && testEndDate ? (
+              <span
+                className="waves-effect waves-light btn-large "
+                onClick={onSubmit}
+              >
+                Create test
+              </span>
+            ) : (
+              <span className="waves-effect disabled waves-light btn-large ">
+                Create test
+              </span>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

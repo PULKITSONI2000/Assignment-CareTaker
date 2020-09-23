@@ -5,6 +5,7 @@ import "firebase/firestore";
 import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/Context";
+import Timer from "./Timer";
 
 const SubmitTest = ({ testInfo }) => {
   const { state } = useContext(UserContext);
@@ -98,47 +99,82 @@ const SubmitTest = ({ testInfo }) => {
   };
 
   const onSubmit = () => {
-    var db = firebase.firestore();
-    var sfDocRef = db.collection("tests").doc(testInfo.testId);
-    return db
-      .runTransaction(function (transaction) {
-        return transaction.get(sfDocRef).then(function (sfDoc) {
-          if (!sfDoc.exists) {
-            // eslint-disable-next-line
-            throw "Document does not exist!";
-          }
-          transaction.update(sfDocRef, {
-            presentStudents: firebase.firestore.FieldValue.arrayUnion({
-              studentId: state.user.uid,
-              studentName: state.user.displayName,
-              studentPhotoUrl: state.user.photoURL,
-              studentMessage: message,
-              AnswerFiles: files,
-            }),
-          });
-          transaction.update(sfDocRef, {
-            absentStudents: firebase.firestore.FieldValue.arrayRemove({
-              studentId: state.user.uid,
-              studentName: state.user.displayName,
-              studentPhotoUrl: state.user.photoURL,
-            }),
-          });
+    try {
+      if (testInfo.endDate.toDate() < new Date()) {
+        // eslint-disable-next-line
+        throw "Time's up you Miss tha test";
+      }
+
+      var db = firebase.firestore();
+      const code = nanoid(14);
+
+      db.collection("submittedTest")
+        .doc(code)
+        .set({
+          studentId: state.user.uid,
+          studentName: state.user.displayName,
+          studentPhotoUrl: state.user.photoURL,
+          studentMessage: message,
+          AnswerFiles: files,
+
+          testId: testInfo.testId,
+          classCode: testInfo.classCode,
+          endDate: testInfo.endDate,
+          submittionDate: firebase.firestore.FieldValue.serverTimestamp(),
+          teacherId: testInfo.teacherId,
+        })
+        .then(() => {
+          var sfDocRef = db.collection("tests").doc(testInfo.testId);
+          return db
+            .runTransaction(function (transaction) {
+              return transaction.get(sfDocRef).then(function (sfDoc) {
+                if (!sfDoc.exists) {
+                  // eslint-disable-next-line
+                  throw "Document does not exist!";
+                }
+                transaction.update(sfDocRef, {
+                  presentStudents: firebase.firestore.FieldValue.arrayUnion({
+                    studentId: state.user.uid,
+                    studentName: state.user.displayName,
+                    studentPhotoUrl: state.user.photoURL,
+                    submittionId: code,
+                  }),
+                });
+                transaction.update(sfDocRef, {
+                  absentStudents: firebase.firestore.FieldValue.arrayRemove({
+                    studentId: state.user.uid,
+                    studentName: state.user.displayName,
+                    studentPhotoUrl: state.user.photoURL,
+                  }),
+                });
+              });
+            })
+            .then(function () {
+              toast.success("Test Submitted");
+              setMessage("");
+              setFiles("");
+            })
+            .catch(function (error) {
+              console.log("Transaction failed: ", error);
+              toast.error("Please Try again");
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error(`failed, ${err}`);
         });
-      })
-      .then(function () {
-        toast.success("Test Submitted");
-        setMessage("");
-        setFiles("");
-      })
-      .catch(function (error) {
-        console.log("Transaction failed: ", error);
-        toast.error("Please Try again");
-      });
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
-    <div className="fg-box container">
+    <div className="fg-box mt-20 container">
       <div className="p-box">
+        <h5 className="primary">
+          Time Left :-{" "}
+          {testInfo.endDate && <Timer endTime={testInfo.endDate.toDate()} />}
+        </h5>
         {/* /// attachments */}
         <div>
           <ul className="collection with-header">

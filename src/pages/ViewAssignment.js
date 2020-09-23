@@ -296,18 +296,30 @@ const ViewAssignment = ({ match }) => {
               </h4>
               {/* {submittionInfo.remark} */}
               {submittionInfo.marks && (
-                <h5 className="mt-20">Grade : {submittionInfo.marks}</h5>
+                <h5 className="mt-20 secondary">
+                  Grade : {submittionInfo.marks}
+                </h5>
               )}
-              {submittionInfo.remark && submittionInfo.remark.length > 0 && (
-                <ul className="collection">
-                  {submittionInfo.remark.map((remark, index) => (
-                    <li key={index} className="collection-item">
-                      {remark.feedback}
-                      {"  "}
-                      <span className="grey-text right">~{remark.teacher}</span>
-                    </li>
-                  ))}
-                </ul>
+              {submittionInfo.remark && (
+                <div>
+                  {" "}
+                  <div class="divider"></div>
+                  <h5 className="left-align primary">Remarks :</h5>
+                  {submittionInfo.remark.length > 0 && (
+                    <ul className="collection">
+                      {submittionInfo.remark.map((remark, index) => (
+                        <li key={index} className="collection-item left-align">
+                          <div>
+                            {remark.feedback}
+                            <span className="secondary-content grey-text">
+                              ~{remark.teacher}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               )}
             </div>
           ) : (
