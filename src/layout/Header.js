@@ -328,7 +328,7 @@ const Header = ({ history }) => {
             <Link to={"/class/create"}>Create Class</Link>
           </li>
         )}
-        {state.user && state.user.emailVerified && (
+        {state.user && state.user.emailVerified && state.teacher === false && (
           <li>
             <Link
               to={"/"}

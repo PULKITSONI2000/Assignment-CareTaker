@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../context/Context";
 import { Link, Redirect } from "react-router-dom";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { FcGoogle } from "react-icons/fc";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -50,22 +50,33 @@ const Login = () => {
       });
   };
 
-  /// Configure FirebaseUI.
-  const uiConfig = {
-    // Popup signin flow rather than redirect flow.
-    signInFlow: "popup",
-    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: "/",
-    // We will display Google and Email as auth providers.
-    signInOptions: [
-      // firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    ],
-    callbacks: {
-      signInSuccessWithAuthResult: (user) => {
-        addUserInfo(user);
-      },
-    },
+  const loginWithGoogle = () => {
+    var provider = new firebase.auth.GoogleAuthProvider();
+
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function (result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // var token = result.credential.accessToken;
+        // console.log("tpken", token);
+        // // The signed-in user info.
+        // var user = result.user;
+        addUserInfo(result);
+        // console.log("user", user);
+        // ...
+      })
+      .catch(function (error) {
+        console.log(error);
+        // Handle Errors here.
+        // var errorCode = error.code;
+        // var errorMessage = error.message;
+        // // The email of the user's account used.
+        // var email = error.email;
+        // // The firebase.auth.AuthCredential type that was used.
+        // var credential = error.credential;
+        // ...
+      });
   };
 
   if (state.user) {
@@ -76,11 +87,14 @@ const Login = () => {
     <div className="container center-align mt-100">
       {!state.user && (
         <div className="center-align">
-          <StyledFirebaseAuth
-            className=" mt-100 w-100"
-            uiConfig={uiConfig}
-            firebaseAuth={firebase.auth()}
-          />
+          <div className=" mt-80 w-100">
+            <button onClick={loginWithGoogle} className="google-button">
+              <span className="valign-wrapper ">
+                <FcGoogle size={30} />
+                Sign in with Google
+              </span>
+            </button>
+          </div>
           <div className="center-align">OR</div>
 
           <Row className="center-align mt-10">
@@ -108,6 +122,7 @@ const Login = () => {
                     type="password"
                     className="validate"
                     required
+                    autoComplete="on"
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);

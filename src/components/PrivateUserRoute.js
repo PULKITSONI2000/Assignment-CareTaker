@@ -11,14 +11,12 @@ const PrivateUserRoute = ({ component: Component, ...rest }) => {
       render={(
         props // for location // can also be destructure as {location}
       ) => {
-        const tempState = state;
-
-        return tempState.user ? (
+        return state.user ? (
           <Component {...props} />
         ) : (
           <Redirect
             to={{
-              pathname: "/",
+              pathname: "/login",
               state: { from: props.location },
             }}
           />
