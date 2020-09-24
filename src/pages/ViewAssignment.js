@@ -55,7 +55,6 @@ const ViewAssignment = ({ match }) => {
         .get()
         .then((result) => {
           setSubmittionInfo(result.data());
-          console.log("result", result.data());
         })
         .catch((err) => {
           console.log(err);
@@ -72,7 +71,6 @@ const ViewAssignment = ({ match }) => {
 
   const fileHandler = async (e) => {
     try {
-      console.log(e.target.files);
       const file = e.target.files[0];
 
       var metadata = {

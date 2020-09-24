@@ -28,6 +28,7 @@ const StartTest = ({ classInfo }) => {
   const [files, setFiles] = useState([]);
 
   var tempfiles = [];
+  var uploadTask = false;
 
   useEffect(() => {
     return () => {
@@ -38,7 +39,9 @@ const StartTest = ({ classInfo }) => {
       setIsUploading(false);
       setProgress(0);
       setFiles([]);
+      uploadTask && uploadTask.cancel();
     };
+    // eslint-disable-next-line
   }, []);
 
   const fileHandler = async (e) => {
@@ -58,7 +61,7 @@ const StartTest = ({ classInfo }) => {
 
       const storageRef = await firebase.storage().ref();
 
-      var uploadTask = storageRef
+      uploadTask = storageRef
         .child(`teacher/tests/` + file.name + nanoid(10))
         .put(file, metadata);
       uploadTask.on(

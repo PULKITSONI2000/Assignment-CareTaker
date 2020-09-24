@@ -3,12 +3,15 @@ import {
   SET_TEACHER,
   SET_CLASSES,
   ADD_CLASSES,
+  SET_ADMIN,
 } from "./action.types";
 
 export default (state, action) => {
   switch (action.type) {
     case SET_USER:
       return { ...state, user: action.payload };
+    case SET_ADMIN:
+      return { ...state, admin: action.payload };
     case SET_TEACHER:
       return { ...state, teacher: action.payload };
     case SET_CLASSES:

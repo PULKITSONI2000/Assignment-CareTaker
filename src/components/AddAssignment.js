@@ -28,7 +28,6 @@ const AddAssignment = ({ state, classCode }) => {
 
   const fileHandler = async (e) => {
     try {
-      console.log(e.target.files);
       const file = e.target.files[0];
 
       var metadata = {

@@ -5,6 +5,8 @@ import { FcGoogle } from "react-icons/fc";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/auth";
+
 import { toast } from "react-toastify";
 import { Col, Row } from "react-materialize";
 
@@ -86,7 +88,7 @@ const Login = () => {
   return (
     <div className="container center-align mt-100">
       {!state.user && (
-        <div className="center-align">
+        <div>
           <div className=" mt-80 w-100">
             <button onClick={loginWithGoogle} className="google-button">
               <span className="valign-wrapper ">

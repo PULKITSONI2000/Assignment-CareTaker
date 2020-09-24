@@ -3,12 +3,13 @@ import reducer from "./reducer";
 import { UserContext } from "./Context";
 
 import firebase from "firebase/app";
-import { SET_USER, SET_TEACHER, SET_CLASSES } from "./action.types";
+import { SET_USER, SET_TEACHER, SET_CLASSES, SET_ADMIN } from "./action.types";
 
 const ContextsProvider = ({ children }) => {
   const initialState = {
     user: false,
     teacher: false,
+    admin: false,
     classes: [],
   };
 
@@ -24,13 +25,21 @@ const ContextsProvider = ({ children }) => {
         userAuthStatus.getIdTokenResult().then((idTokenResult) => {
           dispatch({
             type: SET_TEACHER,
-            payload: idTokenResult.claims.teacher || false,
+            payload: idTokenResult.claims.teacher
+              ? idTokenResult.claims.teacher
+              : false,
           });
-          if (idTokenResult.claims.teacher) {
+          if (idTokenResult.claims.admin) {
+            dispatch({
+              type: SET_ADMIN,
+              payload: idTokenResult.claims.admin
+                ? idTokenResult.claims.admin
+                : false,
+            });
+
             firebase
               .firestore()
               .collectionGroup("classes")
-              .where("teacher", "==", userAuthStatus.displayName)
               .get()
               .then((querySnapshot) => {
                 var classes = [];
@@ -48,27 +57,56 @@ const ContextsProvider = ({ children }) => {
                 console.log("Error getting documents: ", error);
               });
           } else {
-            firebase
-              .firestore()
-              .collectionGroup("JoinedClasses")
-              .where("studentId", "==", userAuthStatus.uid)
-              .get()
-              .then((querySnapshot) => {
-                var classes = [];
-                querySnapshot.forEach((doc) => {
-                  // doc.data() is never undefined for query doc snapshots
-                  // console.log(doc.id, " => ", doc.data());
-                  classes.push(doc.data());
+            dispatch({
+              type: SET_ADMIN,
+              payload: false,
+            });
+
+            if (idTokenResult.claims.teacher) {
+              firebase
+                .firestore()
+                .collectionGroup("classes")
+                .where("teacher", "==", userAuthStatus.displayName)
+                .get()
+                .then((querySnapshot) => {
+                  var classes = [];
+                  querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    // console.log(doc.id, " => ", doc.data());
+                    classes.push(doc.data());
+                  });
+                  dispatch({
+                    type: SET_CLASSES,
+                    payload: classes,
+                  });
+                })
+                .catch((error) => {
+                  console.log("Error getting documents: ", error);
                 });
-                dispatch({
-                  type: SET_CLASSES,
-                  payload: classes,
+            } else {
+              firebase
+                .firestore()
+                .collectionGroup("JoinedClasses")
+                .where("studentId", "==", userAuthStatus.uid)
+                .get()
+                .then((querySnapshot) => {
+                  var classes = [];
+                  querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    // console.log(doc.id, " => ", doc.data());
+                    classes.push(doc.data());
+                  });
+                  dispatch({
+                    type: SET_CLASSES,
+                    payload: classes,
+                  });
+                })
+                .catch((error) => {
+                  console.log("Error getting documents: ", error);
                 });
-              })
-              .catch((error) => {
-                console.log("Error getting documents: ", error);
-              });
+            }
           }
+
           /// setClass
         });
         dispatch({

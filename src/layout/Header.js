@@ -355,7 +355,8 @@ const Header = ({ history }) => {
 
         <li>
           {/* TODO: only for admin */}
-          {state.teacher && state.user.emailVerified && (
+          {/* {console.log(state)} */}
+          {state.admin && state.user.emailVerified && (
             <Link to={"/"} data-target="addTeacher" className=" modal-trigger">
               Add Teacher
             </Link>
