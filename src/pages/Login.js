@@ -70,6 +70,7 @@ const Login = () => {
       })
       .catch(function (error) {
         console.log(error);
+        toast.error(error.message);
         // Handle Errors here.
         // var errorCode = error.code;
         // var errorMessage = error.message;
