@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import firebase from "firebase/app";
@@ -29,9 +29,20 @@ const StartTest = ({ classInfo }) => {
 
   var tempfiles = [];
 
+  useEffect(() => {
+    return () => {
+      setTestName("");
+      setTestDescription("");
+      setTestEndDate("");
+      setTestStartDate("");
+      setIsUploading(false);
+      setProgress(0);
+      setFiles([]);
+    };
+  }, []);
+
   const fileHandler = async (e) => {
     try {
-      console.log(e.target.files);
       const file = e.target.files[0];
 
       var metadata = {
@@ -248,7 +259,7 @@ const StartTest = ({ classInfo }) => {
               <span>File</span>
               <input
                 type="file"
-                accept="application/pdf"
+                accept="application/pdf,image/*"
                 onChange={(event) => {
                   fileHandler(event);
                 }}
@@ -257,7 +268,7 @@ const StartTest = ({ classInfo }) => {
             <div className="file-path-wrapper">
               <input
                 className="file-path validate"
-                accept="application/pdf"
+                accept="application/pdf,image/*"
                 type="text"
               />
             </div>

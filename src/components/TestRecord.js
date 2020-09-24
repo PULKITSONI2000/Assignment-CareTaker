@@ -23,7 +23,9 @@ const TestRecord = ({ classInfo }) => {
     });
     setTests(revArr);
 
-    return () => {};
+    return () => {
+      setTests([]);
+    };
     // eslint-disable-next-line
   }, []);
 

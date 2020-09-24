@@ -39,7 +39,7 @@ const TestTabs = ({ allStudent, testInfo }) => {
   // }, [testId]);
 
   return (
-    <div className=" scroll">
+    <div className="scroll">
       <div className="row">
         <ul className="tabs tabs-fixed-width tab-demo">
           <li className="tab">

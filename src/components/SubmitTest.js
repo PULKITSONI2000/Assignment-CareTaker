@@ -206,7 +206,7 @@ const SubmitTest = ({ testInfo }) => {
             <span>Pdf</span>
             <input
               type="file"
-              accept="application/pdf"
+              accept="application/pdf,image/*"
               onChange={(event) => {
                 fileHandler(event);
               }}
@@ -215,7 +215,7 @@ const SubmitTest = ({ testInfo }) => {
           <div className="file-path-wrapper">
             <input
               className="file-path validate"
-              accept="application/pdf"
+              accept="application/pdf,image/*"
               type="text"
             />
           </div>

@@ -214,7 +214,7 @@ const AddAssignment = ({ state, classCode }) => {
             <span>File</span>
             <input
               type="file"
-              accept="application/pdf"
+              accept="application/pdf,image/*"
               onChange={(event) => {
                 fileHandler(event);
               }}
@@ -223,7 +223,7 @@ const AddAssignment = ({ state, classCode }) => {
           <div className="file-path-wrapper">
             <input
               className="file-path validate"
-              accept="application/pdf"
+              accept="application/pdf,image/*"
               type="text"
             />
           </div>
