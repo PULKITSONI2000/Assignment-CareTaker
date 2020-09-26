@@ -22,7 +22,7 @@ exports.addTeacherRole = functions.https.onCall((data, context) => {
     })
     .then(() => {
       return {
-        message: `Success! ${data.email} Has been made an admin`,
+        message: `Success! ${data.email} Has been made an Teacher`,
       };
     })
     .catch((err) => {

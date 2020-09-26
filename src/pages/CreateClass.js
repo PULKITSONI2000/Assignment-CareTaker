@@ -112,9 +112,9 @@ const CreateClass = () => {
               <label htmlFor="classSection">Class Section</label>
             </div>
             <div className="center-align">
-              {classInfo.classTitle === "" ? (
+              {classInfo.classTitle === "" || classInfo.classSubject === "" ? (
                 <button className="waves-effect disabled waves-light btn-large">
-                  Class Name is required
+                  Class Name & Subject is required
                 </button>
               ) : (
                 <button

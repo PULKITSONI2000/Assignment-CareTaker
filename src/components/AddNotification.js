@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-
-import firebase from "firebase/app";
-import "firebase/storage";
-import "firebase/firestore";
-import { nanoid } from "nanoid";
-import { toast } from "react-toastify";
 import { ProgressBar } from "react-materialize";
 import { FaFileImage, FaFilePdf } from "react-icons/fa";
 
-const CreateAnnouncement = ({ state, classCode }) => {
-  const [announcement, setAnnouncement] = useState("");
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/storage";
+
+import { nanoid } from "nanoid";
+import { toast } from "react-toastify";
+
+const AddNotification = () => {
+  const [notification, setNotification] = useState("");
   const [title, setTitle] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -34,7 +35,7 @@ const CreateAnnouncement = ({ state, classCode }) => {
       const storageRef = await firebase.storage().ref();
 
       var uploadTask = storageRef
-        .child(`teacher/announcement/` + file.name + nanoid(10))
+        .child(`admin/notification/` + file.name + nanoid(10))
         .put(file, metadata);
       uploadTask.on(
         firebase.storage.TaskEvent.STATE_CHANGED,
@@ -99,23 +100,17 @@ const CreateAnnouncement = ({ state, classCode }) => {
     const code = nanoid(14);
     firebase
       .firestore()
-      .collection("user")
-      .doc(state.user.uid)
-      .collection("classes")
-      .doc(classCode)
-      .collection("announcement")
+      .collection("notification")
       .doc(code)
       .set({
-        announcementTitle: title,
-        announcementDetails: announcement,
-        announcementFiles: files,
-        classCode: classCode,
-        teacher: state.user.displayName,
-        announcementId: code,
+        notificationTitle: title,
+        notificationDetails: notification,
+        notificationFiles: files,
+        notificationId: code,
       })
       .then(() => {
         toast.success("Successfully created");
-        setAnnouncement("");
+        setNotification("");
         setFiles([]);
         setTitle("");
       })
@@ -126,7 +121,7 @@ const CreateAnnouncement = ({ state, classCode }) => {
   };
 
   return (
-    <div className="container">
+    <div className="container mt-30 fg-box">
       <form className="my-20 p-box">
         {/* /// title */}
         <div className="input-field">
@@ -140,20 +135,20 @@ const CreateAnnouncement = ({ state, classCode }) => {
               setTitle(event.target.value);
             }}
           />
-          <label htmlFor="title">Assignment Title</label>
+          <label htmlFor="title">Notification Title</label>
         </div>
 
         {/* /// announcement */}
         <div className="input-field">
           <textarea
             id="announcement"
-            value={announcement}
+            value={notification}
             onChange={(event) => {
-              setAnnouncement(event.target.value);
+              setNotification(event.target.value);
             }}
             className="materialize-textarea"
           ></textarea>
-          <label htmlFor="announcement">Announcement Description</label>
+          <label htmlFor="announcement">Notification Description</label>
         </div>
 
         {progress !== 0 && progress !== 100 && (
@@ -161,36 +156,42 @@ const CreateAnnouncement = ({ state, classCode }) => {
         )}
 
         {/* /// attachments */}
-        <div className="mt-10 mb-30">
-          <ul className="collection with-header">
-            {files && files.length > 0 && (
-              <li className="collection-header">
-                <h5 className="green-text">Attachments ({files.length})</h5>
-              </li>
-            )}
-            {files &&
-              files.map((pdf, index) => (
-                <li key={index} className="collection-item">
-                  <div>
-                    <a
-                      href={pdf.pdfFile}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {pdf.pdfName.slice(-3) === "pdf" ? (
-                        <FaFilePdf size={30} className="left" color="red" />
-                      ) : (
-                        <FaFileImage size={30} className="left" color="blue" />
-                      )}
-                      <h5 className="valign-wrapper">
-                        {pdf.pdfName.slice(0, -4)}
-                      </h5>
-                    </a>
-                  </div>
+        {files && files.length > 0 && (
+          <div className="mt-10 mb-30">
+            <ul className="collection with-header">
+              {files && files.length > 0 && (
+                <li className="collection-header">
+                  <h5 className="green-text">Attachments ({files.length})</h5>
                 </li>
-              ))}
-          </ul>
-        </div>
+              )}
+              {files &&
+                files.map((pdf, index) => (
+                  <li key={index} className="collection-item">
+                    <div>
+                      <a
+                        href={pdf.pdfFile}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {pdf.pdfName.slice(-3) === "pdf" ? (
+                          <FaFilePdf size={30} className="left" color="red" />
+                        ) : (
+                          <FaFileImage
+                            size={30}
+                            className="left"
+                            color="blue"
+                          />
+                        )}
+                        <h5 className="valign-wrapper">
+                          {pdf.pdfName.slice(0, -4)}
+                        </h5>
+                      </a>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
 
         {/* /// Files */}
         <div className="file-field input-field">
@@ -214,16 +215,16 @@ const CreateAnnouncement = ({ state, classCode }) => {
         </div>
 
         <div className="center-align">
-          {announcement && !isUploading ? (
+          {notification && !isUploading ? (
             <span
               className="waves-effect waves-light btn-large "
               onClick={onSubmit}
             >
-              Create Announcement
+              Add Notification
             </span>
           ) : (
             <span className="waves-effect disabled waves-light btn-large ">
-              Create Announcement
+              Add Notification
             </span>
           )}
         </div>
@@ -232,4 +233,4 @@ const CreateAnnouncement = ({ state, classCode }) => {
   );
 };
 
-export default CreateAnnouncement;
+export default AddNotification;

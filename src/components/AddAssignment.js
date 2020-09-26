@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFileImage, FaFilePdf } from "react-icons/fa";
 
 import { nanoid } from "nanoid";
 import {
@@ -75,6 +75,7 @@ const AddAssignment = ({ state, classCode }) => {
         (error) => {
           setIsUploading(false);
           console.log(error);
+          setProgress(0);
         },
         () => {
           uploadTask.snapshot.ref
@@ -85,8 +86,8 @@ const AddAssignment = ({ state, classCode }) => {
                 pdfName: file.name,
                 pdfFile: downloadURL,
               });
-              // console.log("tempfiles", file.name);
               setFiles(tempfiles);
+              setProgress(0);
               setIsUploading(false);
               ///
               setFiles(files);
@@ -97,6 +98,7 @@ const AddAssignment = ({ state, classCode }) => {
 
       setFiles(tempfiles);
     } catch (error) {
+      setProgress(0);
       console.log(error);
       toast.error(error);
     }
@@ -198,8 +200,14 @@ const AddAssignment = ({ state, classCode }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <FaFilePdf size={30} className="left" color="red" />
-                      <span className="valign-wrapper">{pdf.pdfName}</span>
+                      {pdf.pdfName.slice(-3) === "pdf" ? (
+                        <FaFilePdf size={30} className="left" color="red" />
+                      ) : (
+                        <FaFileImage size={30} className="left" color="blue" />
+                      )}
+                      <h5 className="valign-wrapper">
+                        {pdf.pdfName.slice(0, -4)}
+                      </h5>
                     </a>
                   </div>
                 </li>

@@ -31,6 +31,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignUp from "./pages/SignUp";
 import ViewTestReport from "./pages/ViewTestReport";
+import Notifications from "./pages/Notifications";
 
 // init firebase
 firebase.initializeApp(firebaseConfig);
@@ -68,6 +69,12 @@ function App() {
               exact
               path="/class/:classcode"
               component={ViewClass}
+            />
+
+            <PrivateUserRoute
+              exact
+              path="/notification"
+              component={Notifications}
             />
 
             <PrivateUserRoute

@@ -323,6 +323,11 @@ const Header = ({ history }) => {
             <Link to={"/"}>Classes</Link>
           </li>
         )}
+        {state.user && (
+          <li>
+            <Link to={"/notification"}>Notificaiton</Link>
+          </li>
+        )}
         {state.user && state.user.emailVerified && state.teacher && (
           <li>
             <Link to={"/class/create"}>Create Class</Link>
@@ -414,8 +419,11 @@ const Header = ({ history }) => {
                   .httpsCallable("addTeacherRole");
 
                 addAdminRole({ email: teacherEmail }).then((result) => {
-                  if (result.data.errorInfo) {
-                    err = result.data.errorInfo.message;
+                  if (result.data.errorInfo || result.data.error) {
+                    err =
+                      (result.data.errorInfo !== undefined &&
+                        result.data.errorInfo.message) ||
+                      result.data.error;
                     setCreateTeacherError(err);
                   }
                   setTeacherEmail("");

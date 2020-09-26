@@ -113,13 +113,7 @@ const ViewClass = ({ match }) => {
         </div>
 
         <div id="Announcement">
-          {classInfo.code && (
-            <AllAnnouncements
-              isTeacher={state.teacher}
-              classCode={classInfo.code}
-              userId={state.user.uid}
-            />
-          )}
+          {classInfo.code && <AllAnnouncements classCode={classInfo.code} />}
         </div>
 
         {state.teacher && (

@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFileImage, FaFilePdf } from "react-icons/fa";
 
 const ShowTest = ({ testInfo }) => {
   return (
@@ -86,8 +86,18 @@ const ShowTest = ({ testInfo }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <FaFilePdf size={30} className="left" color="red" />
-                        <span className="valign-wrapper">{pdf.pdfName}</span>
+                        {pdf.pdfName.slice(-3) === "pdf" ? (
+                          <FaFilePdf size={30} className="left" color="red" />
+                        ) : (
+                          <FaFileImage
+                            size={30}
+                            className="left"
+                            color="blue"
+                          />
+                        )}
+                        <h5 className="valign-wrapper">
+                          {pdf.pdfName.slice(0, -4)}
+                        </h5>
                       </a>
                     </div>
                   </li>

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { Col, Row } from "react-materialize";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFileImage, FaFilePdf } from "react-icons/fa";
 import { nanoid } from "nanoid";
 import { UserContext } from "../context/Context";
 import { toast } from "react-toastify";
@@ -121,6 +121,7 @@ const ViewAssignment = ({ match }) => {
         },
         (error) => {
           setIsUploading(false);
+          setProgress(0);
           console.log(error);
         },
         () => {
@@ -135,6 +136,7 @@ const ViewAssignment = ({ match }) => {
               // console.log("tempfiles", file.name);
               setFiles(tempfiles);
               setIsUploading(false);
+              setProgress(0);
               ///
               setFiles(files);
             })
@@ -145,6 +147,7 @@ const ViewAssignment = ({ match }) => {
       setFiles(tempfiles);
     } catch (error) {
       console.log(error);
+      setProgress(0);
       toast.error(error);
     }
   };
@@ -274,10 +277,22 @@ const ViewAssignment = ({ match }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <FaFilePdf size={30} className="left" color="red" />
-                            <span className="valign-wrapper">
-                              {pdf.pdfName}
-                            </span>
+                            {pdf.pdfName.slice(-3) === "pdf" ? (
+                              <FaFilePdf
+                                size={30}
+                                className="left"
+                                color="red"
+                              />
+                            ) : (
+                              <FaFileImage
+                                size={30}
+                                className="left"
+                                color="blue"
+                              />
+                            )}
+                            <h5 className="valign-wrapper">
+                              {pdf.pdfName.slice(0, -4)}
+                            </h5>
                           </a>
                         </div>
                       </li>

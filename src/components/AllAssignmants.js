@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { GrDocumentPdf, GrDocumentText } from "react-icons/gr";
+import { GrMultiple, GrDocumentText } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/Context";
 
@@ -41,11 +41,9 @@ const AllAssignmants = ({ classCode }) => {
         <ul className="collection">
           {assignments.map((assign, index) => (
             <li key={index} className="collection-item avatar">
-              {/* <i className="material-icons circle red">play_arrow</i> */}
-
               {assign.assignmentFiles.length > 0 ? (
-                <i className="circle red">
-                  <GrDocumentPdf size={22} color="red" />
+                <i className="circle green">
+                  <GrMultiple size={22} color="red" />
                 </i>
               ) : (
                 <i className="circle blue">

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { Col, Row } from "react-materialize";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFileImage, FaFilePdf } from "react-icons/fa";
 
 import M from "materialize-css/dist/js/materialize.min.js";
 import EvaluateStudent from "../components/EvaluateStudent";
@@ -261,14 +261,22 @@ const ViewAssignmentReport = ({ match }) => {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <FaFilePdf
-                                size={30}
-                                className="left"
-                                color="red"
-                              />
-                              <span className="valign-wrapper">
-                                {pdf.pdfName}
-                              </span>
+                              {pdf.pdfName.slice(-3) === "pdf" ? (
+                                <FaFilePdf
+                                  size={30}
+                                  className="left"
+                                  color="red"
+                                />
+                              ) : (
+                                <FaFileImage
+                                  size={30}
+                                  className="left"
+                                  color="blue"
+                                />
+                              )}
+                              <h5 className="valign-wrapper">
+                                {pdf.pdfName.slice(0, -4)}
+                              </h5>
                             </a>
                           </div>
                         </li>
